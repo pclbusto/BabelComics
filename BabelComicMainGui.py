@@ -165,7 +165,7 @@ if __name__ == "__main__":
     ##    babel = BabelComicMainGui()
     root = Tk()
     #root.wm_state('zoomed')
-    root.title('Babel Comic Manager .fdf dfdfdfds f..')
+    root.title('Babel Comic Manager GitHub')
     barraHerramientas = Frame(root)
     barraHerramientas.grid(column=0, row=0, sticky=(E, W))
     barraHerramientas.config()
