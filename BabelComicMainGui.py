@@ -1,12 +1,13 @@
-from tkinter import *
-from tkinter import Tk, ttk
-from tkinter import filedialog
-import shelve
-from ComicBook import ComicBook
+
+#from tkinter import *
+#from tkinter import Tk, ttk
+#from tkinter import filedialog
+#import shelve
+#from ComicBook import ComicBook
 from ComicBookGui import ComicBookGui
 from ComicBooks import ComicBooks
 from ComicVineSearcherGui import ComicCatalogerGui
-from Series import Series
+#from Series import Series
 from BabelComicConfigGui import *
 from BabelComicsVisor import BabelComicVisor
 from BabelComicScannerGui import BabelComicScannerGui
