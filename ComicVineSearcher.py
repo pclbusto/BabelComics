@@ -1,18 +1,9 @@
-from PIL import Image, ImageTk
-from tkinter import Tk
-import math
 from Publishers import *
 from ComicBook import ComicBook
 from ArcoArgumental import *
 import datetime
-
-##import tkinter.Image as TkImage
-from tkinter import ttk
 import urllib.request
 import xml.etree.ElementTree as ET
-
-import sys
-import codecs
 
 
 class ComicVineSearcher():
@@ -206,6 +197,8 @@ class ComicVineSearcher():
                          'volumeName': volumeName, 'volumeId': volumeId})
 
             elif self.entidad == 'volumes':
+                # porque esta aplanado esto? deberiamos usar el objeto Serie
+                print('buscando volumenes')
                 for item in results:
                     count_of_issues = item.find('count_of_issues').text
                     description = item.find('description').text
@@ -262,11 +255,14 @@ class ComicVineSearcher():
 if __name__ == '__main__':
     cv = ComicVineSearcher('7e4368b71c5a66d710a62e996a660024f6a868d4')
     ##    cv = comicVineSearcher('64f7e65686c40cc016b8b8e499f46d6657d26752')
-    cv.setEntidad('story_arc_credits')
-    arco = cv.getVineEntity(55691)
-    print(arco.comics)
+    cv.setEntidad('volumes')
+    #arco = cv.getVineEntity(55691)
+    #print(arco.comics)
 ##    cv.addFilter('')
-# cv.vineSearch()
+    cv.vineSearch()
+    print(cv.statusMessage)
+    cv.print()
+
 # for offset in range(2300,5900,100):
 ##    for offset in range(0, 5900, 100):
 ##        cv.vineSearch(offset)
