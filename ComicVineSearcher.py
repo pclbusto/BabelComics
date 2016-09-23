@@ -165,7 +165,7 @@ class ComicVineSearcher():
 
         # f.write(html.decode(encoding="utf-8"))
         # f.close()
-        # fr = open('consultaComicVine'+self.entidad+'-'+str(self.offset)+'.xml', 'r')
+        # fr = open('consultaComicVine'+self.entidad+'-'+str(self.offset)+'.xml', 'r')..
         # fr.close()
 
         ##        html = response.read()
