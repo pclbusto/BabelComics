@@ -28,7 +28,8 @@ def testSeriesTable(cursor):
     #cursor.execute('''INSERT INTO series (id,nombre,descripcion,image_url,publisherId,AnioInicio,cantidadNumeros)
     #Values(1,"test","Test","dsada",1,1,101)''')
     #conn.commit()
-    cursor.execute('''SELECT * from series''')
+    cursor.execute('''SELECT id, nombre, descripcion, image_url,publisherId,AnioInicio, cantidadNumeros, date_added,name From series
+                left join (select id as pbis,name from publishers )as publishers on series.publisherId = publishers.pbis  order by date_added''')
     rows = cursor.fetchall()
     for row in rows:
         print(row['nombre'])

@@ -103,14 +103,14 @@ Values(?,?,?,?,?,?,?)''', (
         c = self.conexion.cursor()
         if not orden: orden = ''
         if filtro:
-            # print('''SELECT id,nombre,descripcion,image_url,publisherId,AnioInicio,cantidadNumeros,name From series inner join (select id as pbis,name from publishers )as publishers on series.publisherId = publishers.pbis where '''+filtro+' '+orden)
-            # print(valores)
             c.execute(
-                '''SELECT id,nombre,descripcion,image_url,publisherId,AnioInicio,cantidadNumeros,name From series inner join (select id as pbis,name from publishers )as publishers on series.publisherId = publishers.pbis where ''' + filtro + ' ' + orden,
+                '''SELECT id,nombre,descripcion,image_url,publisherId,AnioInicio,cantidadNumeros, date_added,name From series inner join (select id as pbis,name from publishers )as publishers on series.publisherId = publishers.pbis where ''' + filtro + ' ' + orden,
                 valores)
         else:
+            print('''SELECT id, nombre, descripcion, image_url,publisherId,AnioInicio, cantidadNumeros, date_added,name From series
+                left join (select id as pbis,name from publishers )as publishers on series.publisherId = publishers.pbis ''' + ' ' + orden)
             c.execute(
-                '''SELECT id,nombre,descripcion,image_url,publisherId,AnioInicio,cantidadNumeros,name From series
+                '''SELECT id, nombre, descripcion, image_url,publisherId,AnioInicio, cantidadNumeros, date_added,name From series
                 left join (select id as pbis,name from publishers )as publishers on series.publisherId = publishers.pbis ''' + ' ' + orden)
 
         rows = c.fetchall()
@@ -135,10 +135,10 @@ Values(?,?,?,?,?,?,?)''', (
         self.conexion.close()
     def loadDataFromComicVine(self):
         config = BabelComicBookManagerConfig()
-        cv = ComicVineSearcher(config.getClave())
-        cv.setEntidad('volumes')
-        cv.vineSearch()
-        for serie in cv.listaBusquedaVine:
+        comic_searcher = ComicVineSearcher(config.getClave())
+        comic_searcher.setEntidad('volumes')
+        comic_searcher.vineSearch()
+        for serie in comic_searcher.listaBusquedaVine:
             self.add(serie)
 
 
@@ -147,6 +147,7 @@ if __name__ == "__main__":
     ##67600 dio error
     ##67700 dio error
     series = Series()
+    series.getList('',None,'order by date_added')
     #series.rmAll()
     #series.loadDataFromComicVine()
     ##

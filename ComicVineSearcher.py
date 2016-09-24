@@ -167,8 +167,11 @@ class ComicVineSearcher():
         root = ET.fromstring(xml)
         self.statusCode = int(root.find('status_code').text)
         if self.statusCode == 1:
+            #esto puede ser el limite de resultados por pag o menos que esto cuando es l ultima pagina
             number_of_page_results = int(root.find('number_of_page_results').text)
-            number_of_total_results = int(root.find('number_of_total_results').text)
+            # cantidad total de registros este valor dividido por limite no da la cantidad de consultas necesarias para
+            # recuperar todos los datos de la consulta
+            self.cantidadResultados = int(root.find('number_of_total_results').text)
             self.cantidadPaginas = number_of_total_results / self.limit
             status_code = root.find('status_code').text
             results = root.find('results')
@@ -190,26 +193,17 @@ class ComicVineSearcher():
                          'volumeName': volumeName, 'volumeId': volumeId})
 
             elif self.entidad == 'volumes':
-                # porque esta aplanado esto? deberiamos usar el objeto Serie
                 for item in results:
-                    serie = Serie(item.find('id').text,item.find('name').text)
-                    serie.descripcion = item.find('description').text
-                    serie.cantidadNumeros = item.find('count_of_issues').text
-                    # count_of_issues = item.find('count_of_issues').text
-                    # description = item.find('description').text
-                    # Id = item.find('id').text
+                    l_serie = Serie(item.find('id').text, item.find('name').text)
+                    l_serie.descripcion = item.find('description').text
+                    l_serie.cantidadNumeros = item.find('count_of_issues').text
                     if item.find('image').find('super_url') != None:
-                        # image = item.find('image').find('super_url').text
-                        serie.image_url = item.find('image').find('super_url').text
+                        l_serie.image_url = item.find('image').find('super_url').text
                     else:
-                        serie.image_url = ''
-                        #image = ''
-                    # name = item.find('name').text
-                    serie.publisherId = item.find('publisher').text
-                    #publisher = item.find('publisher').text
-                    serie.AnioInicio = item.find('start_year').text
-                    #start_year = item.find('start_year').text
-                    self.listaBusquedaVine.append(serie)
+                        l_serie.image_url = ''
+                    l_serie.publisherId = item.find('publisher').text
+                    l_serie.AnioInicio = item.find('start_year').text
+                    self.listaBusquedaVine.append(l_serie)
 
                     # self.listaBusquedaVine.append({'count_of_issues': count_of_issues,
                     #                                'description': description,

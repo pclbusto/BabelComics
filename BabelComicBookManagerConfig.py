@@ -37,7 +37,7 @@ class BabelComicBookManagerConfig():
         cursor.execute('''SELECT key  From config_VineKeys where id=?''', (1,))
         rows = cursor.fetchall()
         for row in rows:
-            print(row['key'])
+            # print(row['key'])
             self.listaClaves.append(row['key'])
 
     def addClave(self, clave):
