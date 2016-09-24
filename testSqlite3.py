@@ -125,7 +125,7 @@ conn = sqlite3.connect('BabelComic.db')
 conn.row_factory = sqlite3.Row
 cur = conn.cursor()
 #testArcosArgumentales(cur)
-#createTables(cur)
+createTables(cur)
 #testPublisherTable(cur)
 
 testSeriesTable(cur)

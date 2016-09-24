@@ -172,7 +172,7 @@ class ComicVineSearcher():
             # cantidad total de registros este valor dividido por limite no da la cantidad de consultas necesarias para
             # recuperar todos los datos de la consulta
             self.cantidadResultados = int(root.find('number_of_total_results').text)
-            self.cantidadPaginas = number_of_total_results / self.limit
+            self.cantidadPaginas = self.cantidadResultados / self.limit
             status_code = root.find('status_code').text
             results = root.find('results')
             if (self.entidad == 'issues'):
@@ -229,7 +229,7 @@ class ComicVineSearcher():
                                                    'logoImagePath': publisher.logoImagePath})
                     '''
                     Publishers().add(publisher)
-            self.statusMessage = 'Recuperados: ' + str(self.offset) + ' de ' + str(number_of_total_results)
+            self.statusMessage = 'Recuperados: ' + str(self.offset) + ' de ' + str(self.cantidadResultados)
 
         elif self.statusCode == 100:
             self.statusMessage = 'revisar'

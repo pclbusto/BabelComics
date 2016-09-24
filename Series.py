@@ -19,7 +19,6 @@ Values(?,?,?,?,?,?,?)''', (
         serie.id, serie.nombre, serie.descripcion, serie.image_url, serie.publisherId, serie.AnioInicio,
         serie.cantidadNumeros))
         self.conexion.commit()
-        print('insertamos')
 
     def rm(self, Id):
         cursor = self.conexion.cursor()
@@ -107,8 +106,6 @@ Values(?,?,?,?,?,?,?)''', (
                 '''SELECT id,nombre,descripcion,image_url,publisherId,AnioInicio,cantidadNumeros, date_added,name From series inner join (select id as pbis,name from publishers )as publishers on series.publisherId = publishers.pbis where ''' + filtro + ' ' + orden,
                 valores)
         else:
-            print('''SELECT id, nombre, descripcion, image_url,publisherId,AnioInicio, cantidadNumeros, date_added,name From series
-                left join (select id as pbis,name from publishers )as publishers on series.publisherId = publishers.pbis ''' + ' ' + orden)
             c.execute(
                 '''SELECT id, nombre, descripcion, image_url,publisherId,AnioInicio, cantidadNumeros, date_added,name From series
                 left join (select id as pbis,name from publishers )as publishers on series.publisherId = publishers.pbis ''' + ' ' + orden)
@@ -137,19 +134,21 @@ Values(?,?,?,?,?,?,?)''', (
         config = BabelComicBookManagerConfig()
         comic_searcher = ComicVineSearcher(config.getClave())
         comic_searcher.setEntidad('volumes')
-        comic_searcher.vineSearch()
+        lista_series = series.getList('')
+        comic_searcher.vineSearch(len(lista_series)+1)
         for serie in comic_searcher.listaBusquedaVine:
             self.add(serie)
-
+        print('porcentaje completado: '+(100*()))
 
 if __name__ == "__main__":
 
     ##67600 dio error
     ##67700 dio error
     series = Series()
-    series.getList('',None,'order by date_added')
+    #series.getList('', None, 'order by nombre desc')
     #series.rmAll()
-    #series.loadDataFromComicVine()
+
+    series.loadDataFromComicVine()
     ##
     ##    series.loadFromFiles()
     ##    series.rmAll()
@@ -157,6 +156,7 @@ if __name__ == "__main__":
     ##    series.rm('-1')
     ##    series.add(serie)
     ##   for serie in series.getList(("-1",),'id = ?'):
-    for serie in series.getList(''):
-        print(serie.nombre, serie.id)
-    series.close()
+
+    #for serie in series.getList('', None, 'order by nombre desc'):
+    #    print(serie.nombre, serie.id)
+    #series.close()
