@@ -2,9 +2,11 @@ import codecs
 import xml.etree.ElementTree as ET
 import sqlite3
 from Serie import Serie
+from BabelComicBookManagerConfig import  BabelComicBookManagerConfig
+#importamos ComicVineSearcher para poder hacer la rutina que cargue datos desde comicvine
+from ComicVineSearcher import *
 
-
-class Series():
+class Series:
     def __init__(self):
         self.conexion = sqlite3.connect('BabelComic.db')
         self.conexion.row_factory = sqlite3.Row
@@ -17,6 +19,7 @@ Values(?,?,?,?,?,?,?)''', (
         serie.id, serie.nombre, serie.descripcion, serie.image_url, serie.publisherId, serie.AnioInicio,
         serie.cantidadNumeros))
         self.conexion.commit()
+        print('insertamos')
 
     def rm(self, Id):
         cursor = self.conexion.cursor()
@@ -107,7 +110,8 @@ Values(?,?,?,?,?,?,?)''', (
                 valores)
         else:
             c.execute(
-                '''SELECT id,nombre,descripcion,image_url,publisherId,AnioInicio,cantidadNumeros,name From series inner join (select id as pbis,name from publishers )as publishers on series.publisherId = publishers.pbis ''' + ' ' + orden)
+                '''SELECT id,nombre,descripcion,image_url,publisherId,AnioInicio,cantidadNumeros,name From series
+                left join (select id as pbis,name from publishers )as publishers on series.publisherId = publishers.pbis ''' + ' ' + orden)
 
         rows = c.fetchall()
         lista = []
@@ -129,6 +133,13 @@ Values(?,?,?,?,?,?,?)''', (
 
     def close(self):
         self.conexion.close()
+    def loadDataFromComicVine(self):
+        config = BabelComicBookManagerConfig()
+        cv = ComicVineSearcher(config.getClave())
+        cv.setEntidad('volumes')
+        cv.vineSearch()
+        for serie in cv.listaBusquedaVine:
+            self.add(serie)
 
 
 if __name__ == "__main__":
@@ -136,13 +147,15 @@ if __name__ == "__main__":
     ##67600 dio error
     ##67700 dio error
     series = Series()
-    ##    series.rmAll()
+    #series.rmAll()
+    #series.loadDataFromComicVine()
+    ##
     ##    series.loadFromFiles()
     ##    series.rmAll()
     ##    serie = Serie('-1','No especificada')
     ##    series.rm('-1')
     ##    series.add(serie)
     ##   for serie in series.getList(("-1",),'id = ?'):
-    for serie in series.getList(('legends',), 'nombre like ?'):
+    for serie in series.getList(''):
         print(serie.nombre, serie.id)
     series.close()

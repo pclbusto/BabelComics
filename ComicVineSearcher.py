@@ -1,6 +1,8 @@
 from Publishers import *
 from ComicBook import ComicBook
 from ArcoArgumental import *
+from Serie import Serie
+from Series import Series
 import datetime
 import urllib.request
 import xml.etree.ElementTree as ET
@@ -158,17 +160,8 @@ class ComicVineSearcher():
                 self.offset) + '&sort=id:asc')
         print(
             'http://www.comicvine.com/api/' + self.entidad + '/?api_key=' + self.vinekey + self.filter + '&offset=' + str(
-                self.offset) + '&sort=id:asc')
+                self.offset) + '&sort=date_added:asc')
         html = response.read()
-        # f = open('consultaComicVine'+self.entidad+'-'+str(self.offset)+'.xml', 'w')
-
-
-        # f.write(html.decode(encoding="utf-8"))
-        # f.close()
-        # fr = open('consultaComicVine'+self.entidad+'-'+str(self.offset)+'.xml', 'r')...
-        # fr.close()
-
-        ##        html = response.read()
 
         xml = html.decode()
         root = ET.fromstring(xml)
@@ -198,25 +191,33 @@ class ComicVineSearcher():
 
             elif self.entidad == 'volumes':
                 # porque esta aplanado esto? deberiamos usar el objeto Serie
-                print('buscando volumenes')
                 for item in results:
-                    count_of_issues = item.find('count_of_issues').text
-                    description = item.find('description').text
-                    Id = item.find('id').text
+                    serie = Serie(item.find('id').text,item.find('name').text)
+                    serie.descripcion = item.find('description').text
+                    serie.cantidadNumeros = item.find('count_of_issues').text
+                    # count_of_issues = item.find('count_of_issues').text
+                    # description = item.find('description').text
+                    # Id = item.find('id').text
                     if item.find('image').find('super_url') != None:
-                        image = item.find('image').find('super_url').text
+                        # image = item.find('image').find('super_url').text
+                        serie.image_url = item.find('image').find('super_url').text
                     else:
-                        image = ''
-                    name = item.find('name').text
-                    publisher = item.find('publisher').text
-                    start_year = item.find('start_year').text
-                    self.listaBusquedaVine.append({'count_of_issues': count_of_issues,
-                                                   'description': description,
-                                                   'Id': Id,
-                                                   'image': image,
-                                                   'name': name,
-                                                   'publisher': publisher,
-                                                   'start_year': start_year})
+                        serie.image_url = ''
+                        #image = ''
+                    # name = item.find('name').text
+                    serie.publisherId = item.find('publisher').text
+                    #publisher = item.find('publisher').text
+                    serie.AnioInicio = item.find('start_year').text
+                    #start_year = item.find('start_year').text
+                    self.listaBusquedaVine.append(serie)
+
+                    # self.listaBusquedaVine.append({'count_of_issues': count_of_issues,
+                    #                                'description': description,
+                    #                                'Id': Id,
+                    #                                'image': image,
+                    #                                'name': name,
+                    #                                'publisher': publisher,
+                    #                                'start_year': start_year})
             elif self.entidad == 'publishers':
                 for item in results:
                     publisher = Publisher(item.find('id').text, item.find('name').text)
@@ -262,7 +263,8 @@ if __name__ == '__main__':
     cv.vineSearch()
     print(cv.statusMessage)
     cv.print()
-
+    for serie in cv.listaBusquedaVine:
+        print(serie.nombre)
 # for offset in range(2300,5900,100):
 ##    for offset in range(0, 5900, 100):
 ##        cv.vineSearch(offset)
