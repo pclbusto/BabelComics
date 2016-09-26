@@ -1,4 +1,5 @@
 import sqlite3
+from datetime import datetime
 
 '''
 
@@ -42,7 +43,7 @@ class BabelComicBookManagerConfig():
 
     def addClave(self, clave):
         cursor = self.conexion.cursor()
-        cursor.execute('''INSERT INTO config_VineKeys (id,key) values (?,?)''', (1, clave,))
+        cursor.execute('''INSERT INTO config_VineKeys (key) values (?)''', (clave,))
         self.listaClaves.append(clave)
         self.conexion.commit()
 
@@ -50,6 +51,27 @@ class BabelComicBookManagerConfig():
         cursor = self.conexion.cursor()
         cursor.execute('''INSERT INTO config_TipoArchivo (id,tipo) values (?,?)''', (1, tipo,))
         self.listaTipos.append(tipo)
+        self.conexion.commit()
+
+    def updateStatus(self, key, recurso):
+        # este metodo busca para el recurso y la clave si tiene un status. Si lo tiene lo incrementa en uno
+        # y le cambia la fecha de inicio. Esto es para evitar colgar las claves de comicvine.
+        cursor = self.conexion.cursor()
+        cursor.execute('''SELECT  cantidadTotalConsultas, fechaInicioConsultas from  config_VineKeysStatus where key=? and recurso = ?''', (key,recurso))
+        rows = cursor.fetchall()
+        existeStatus = False
+        for row in rows:
+            existeStatus = True
+
+        if existeStatus:
+            #actualizamos
+            cursor.execute('''UPDATE config_VineKeysStatus SET cantidadTotalConsultas = cantidadTotalConsultas+1 , fechaInicioConsultas = ? where key=? and recurso = ?''',
+                (key, recurso, datetime.now()))
+        else:
+            #insertamos
+            cursor.execute(
+                '''INSERT INTO config_VineKeysStatus (id , recurso, cantidadTotalConsultas, fechaInicioConsultas )''',
+                (key, recurso, datetime.now()))
         self.conexion.commit()
 
     def addDirectorio(self, directorio):
@@ -110,13 +132,14 @@ class BabelComicBookManagerConfig():
             self.addClave(clave)
 
     def getClave(self):
+
         return self.listaClaves[0]
 
 
 if __name__ == "__main__":
     config = BabelComicBookManagerConfig()
-    ##    config.addClave('64f7e65686c40cc016b8b8e499f46d6657d26752')
-    ##    config.addClave('7e4368b71c5a66d710a62e996a660024f6a868d4')
+    #config.addClave('64f7e65686c40cc016b8b8e499f46d6657d26752')
+    #config.addClave('7e4368b71c5a66d710a62e996a660024f6a868d4')
     ##    config.addDirectorio('c:\\Users\\bustoped\\Downloads\\Comics\\')
     ##    config.delDirectorio('c:\\Users\\bustoped\\Downloads\\Comics\\')
     ##    config.addTipo('cbz')

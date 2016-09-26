@@ -50,9 +50,12 @@ def testArcosArgumentalesComics(cursor):
     cursor.execute('''SELECT idComic , idArco, orden , rowid from  ArcosArgumentalesComics ''')
     rows = cursor.fetchall()
     for row in rows:
-
-        print(row['rowid'],row['idArco'],row['idComic'],row['orden'])
-
+        print(row['rowid'], row['idArco'], row['idComic'], row['orden'])
+def testVineKeys(cursor):
+    cursor.execute('''SELECT id, key from  config_VineKeys''')
+    rows = cursor.fetchall()
+    for row in rows:
+        print(row['id'], row['key'])
 
 def testPublisherTable(cursor):
     cursor.execute('''SELECT * from Publishers where name like ?''',('%DC%',))
@@ -105,7 +108,7 @@ def createTables(cursor):
 ##    cursor.execute('''DROP TABLE config_TipoArchivo''')
 ##    cursor.execute('''DROP TABLE config_Directorios''')
 ##    cursor.execute('''DROP TABLE IF EXISTS config_VineKeys''')
-##    cursor.execute('''DROP TABLE IF EXISTS config_VineKeysStatus''')
+    cursor.execute('''DROP TABLE IF EXISTS config_VineKeysStatus''')
 ##    cursor.execute('''DROP TABLE IF EXISTS Publishers''')
 ##    cursor.execute('''CREATE TABLE config (id integer, PRIMARY KEY (id)) ''')
 ##    cursor.execute('''DROP TABLE IF EXISTS ArcosArgumentales''')
@@ -115,7 +118,7 @@ def createTables(cursor):
 ##    cursor.execute('''DROP TABLE IF EXISTS Listas''')
 ##    cursor.execute('''CREATE TABLE Listas (nombreLista text, sublistaDe text, descripcion text, nombreVista text, sqlText text, PRIMARY KEY (nombreLista))''')
 ##  hora en la que se inicia el contador de consultas de vine. Si la diferencia entre fechaUltimaConsulta y fechaInicio es mas de una hora hay que reiniciar el contador de consultas y las fechas
-##    cursor.execute('''CREATE TABLE config_VineKeys (id integer, key text, PRIMARY KEY (id,key)) ''')
+#   cursor.execute('''CREATE TABLE config_VineKeys (id integer, key text, PRIMARY KEY (id AUTOINCREMENT)) ''')
 ##    cursor.execute('''CREATE TABLE config_VineKeysStatus (key text, recurso integer, cantidadTotalConsultas integer, fechaInicioConsultas, PRIMARY KEY (key,recurso)) ''')
 ##    cursor.execute('''CREATE TABLE Publishers (id text, name text, deck text, description text, logoImagePath, PRIMARY KEY (id)) ''')
 ##    cursor.execute('''CREATE TABLE config_TipoArchivo (id integer,tipo text, PRIMARY KEY (id , tipo)) ''')
@@ -125,10 +128,11 @@ conn = sqlite3.connect('BabelComic.db')
 conn.row_factory = sqlite3.Row
 cur = conn.cursor()
 #testArcosArgumentales(cur)
-createTables(cur)
-#testPublisherTable(cur)
+#createTables(cur)
 
-testSeriesTable(cur)
+testVineKeys(cur)
+
+#testSeriesTable(cur)
 #testGetSerie(cur,486667)
 #alterTableComics(cur)
 

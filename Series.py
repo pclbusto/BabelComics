@@ -100,6 +100,7 @@ Values(?,?,?,?,?,?,?)''', (
 
     def getList(self, valores, filtro=None, orden=None):
         c = self.conexion.cursor()
+
         if not orden: orden = ''
         if filtro:
             c.execute(
@@ -130,6 +131,7 @@ Values(?,?,?,?,?,?,?)''', (
 
     def close(self):
         self.conexion.close()
+
     def loadDataFromComicVine(self):
         config = BabelComicBookManagerConfig()
         comic_searcher = ComicVineSearcher(config.getClave())
@@ -138,7 +140,7 @@ Values(?,?,?,?,?,?,?)''', (
         comic_searcher.vineSearch(len(lista_series)+1)
         for serie in comic_searcher.listaBusquedaVine:
             self.add(serie)
-        print('porcentaje completado: '+(100*()))
+        print('porcentaje completado: '+str((100*(len(lista_series)/comic_searcher.cantidadResultados))))
 
 if __name__ == "__main__":
 
