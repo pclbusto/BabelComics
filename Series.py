@@ -100,7 +100,6 @@ Values(?,?,?,?,?,?,?)''', (
 
     def getList(self, valores, filtro=None, orden=None):
         c = self.conexion.cursor()
-
         if not orden: orden = ''
         if filtro:
             c.execute(
@@ -134,7 +133,7 @@ Values(?,?,?,?,?,?,?)''', (
 
     def loadDataFromComicVine(self):
         config = BabelComicBookManagerConfig()
-        comic_searcher = ComicVineSearcher(config.getClave())
+        comic_searcher = ComicVineSearcher(config.getClave('volumes'))
         comic_searcher.setEntidad('volumes')
         lista_series = series.getList('')
         comic_searcher.vineSearch(len(lista_series)+1)
@@ -149,7 +148,6 @@ if __name__ == "__main__":
     series = Series()
     #series.getList('', None, 'order by nombre desc')
     #series.rmAll()
-
     series.loadDataFromComicVine()
     ##
     ##    series.loadFromFiles()

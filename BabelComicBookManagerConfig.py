@@ -57,21 +57,19 @@ class BabelComicBookManagerConfig():
         # este metodo busca para el recurso y la clave si tiene un status. Si lo tiene lo incrementa en uno
         # y le cambia la fecha de inicio. Esto es para evitar colgar las claves de comicvine.
         cursor = self.conexion.cursor()
-        cursor.execute('''SELECT  cantidadTotalConsultas, fechaInicioConsultas from  config_VineKeysStatus where key=? and recurso = ?''', (key,recurso))
+        cursor.execute('''SELECT  cantidadTotalConsultas, fechaInicioConsultas from  config_VineKeysStatus where key=? and recurso = ?''', (key, recurso, ))
         rows = cursor.fetchall()
         existeStatus = False
         for row in rows:
             existeStatus = True
-
+            break
         if existeStatus:
             #actualizamos
-            cursor.execute('''UPDATE config_VineKeysStatus SET cantidadTotalConsultas = cantidadTotalConsultas+1 , fechaInicioConsultas = ? where key=? and recurso = ?''',
-                (key, recurso, datetime.now()))
+            cursor.execute('''UPDATE config_VineKeysStatus SET cantidadTotalConsultas = cantidadTotalConsultas+1 , fechaInicioConsultas = ? where key=? and recurso = ?''', (key, recurso, datetime.now(), ))
         else:
             #insertamos
             cursor.execute(
-                '''INSERT INTO config_VineKeysStatus (id , recurso, cantidadTotalConsultas, fechaInicioConsultas )''',
-                (key, recurso, datetime.now()))
+                '''INSERT INTO config_VineKeysStatus (id , recurso, cantidadTotalConsultas, fechaInicioConsultas )''', (key, recurso, datetime.now()), )
         self.conexion.commit()
 
     def addDirectorio(self, directorio):
@@ -131,7 +129,14 @@ class BabelComicBookManagerConfig():
         for clave in listaClaves:
             self.addClave(clave)
 
-    def getClave(self):
+    def __getClaveMenosUsadaPorRecurso__(self, recurso):
+        cursor = self.conexion.cursor()
+        cursor.execute('''SELECT top 1 key,min(cantidadTotalConsultas) as cantidadTotalConsultas FROM config_VineKeysStatus
+        WHERE recurso=?''', (recurso,))
+        rows = cursor.fetchall()
+
+        return ""
+    def getClave(self, entidad):
 
         return self.listaClaves[0]
 
