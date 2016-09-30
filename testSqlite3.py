@@ -4,6 +4,10 @@ import codecs
 import xml.etree.ElementTree as ET
 
 def testGetSerie(cursor,Id):
+    """
+    Esto es una prueba de comentario
+
+    """
     print('di para consulta:' + str(Id))
     cursor.execute('''SELECT id,nombre,descripcion,image_url,publisherId,AnioInicio,cantidadNumeros From series where id=?''',(Id,))
         #inner join (select id as pbis,name from publishers )as publishers on series.publisherId = publishers.pbis where id=?''',
@@ -52,10 +56,15 @@ def testArcosArgumentalesComics(cursor):
     for row in rows:
         print(row['rowid'], row['idArco'], row['idComic'], row['orden'])
 def testVineKeys(cursor):
-    cursor.execute('''SELECT id, key from  config_VineKeys''')
+    cursor.execute('''SELECT key from  config_VineKeys''')
     rows = cursor.fetchall()
     for row in rows:
         print(row['id'], row['key'])
+
+def testKeyStatusTable(cursor):
+    cursor.execute('''SELECT * from config_VineKeysStatus''')
+    rows = cursor.fetchall()
+    printAllColumns(rows)
 
 def testPublisherTable(cursor):
     cursor.execute('''SELECT * from Publishers where name like ?''',('%DC%',))
@@ -88,7 +97,7 @@ def printAllColumns(rows):
         for columna in rows[0].keys():
             fila += str(row[columna]) + "|"
         print(fila)
-    print(len(rows))
+    print("cantidad de filas: "+str(len(rows)))
 
 def alterTableComics(cursor):
     #cursor.execute('''ALTER TABLE  comics ADD COLUMN NombreArchivo text''')
@@ -101,36 +110,37 @@ def testVista(cursor,vista):
 def createTables(cursor):
     cursor.execute('''DROP TABLE IF EXISTS series''')
     cursor.execute('''CREATE TABLE series (id text PRIMARY KEY, nombre text, descripcion text, image_url text, publisherId text, AnioInicio text, cantidadNumeros int,date_added integer)''')
-##    cursor.execute('''CREATE TABLE comics (path text PRIMARY KEY, titulo text, serieId text, numero int, fechaTapa text, AnioInicio text, volumen text, idExterno text, resumen text, notas text, anio int, mes int, dia int, direccionWeb text, cantidadPaginas int, rating real, ratingExterno real, tipo text, fechaIngresoSistema text, fechaultimaActualizacion text, fechaultimaActualizacionSistemaExterno text)''')
-##    cursor.execute('''CREATE TABLE config (id integertext PRIMARY KEY)''')
-##    cursor.execute('''CREATE TABLE config_directorios (id integertext PRIMARY KEY,path text)''')
-##    cursor.execute('''DROP TABLE config''')
-##    cursor.execute('''DROP TABLE config_TipoArchivo''')
-##    cursor.execute('''DROP TABLE config_Directorios''')
-##    cursor.execute('''DROP TABLE IF EXISTS config_VineKeys''')
+    cursor.execute('''DROP TABLE IF EXISTS comics''')
+    cursor.execute('''CREATE TABLE comics (path text PRIMARY KEY, titulo text, serieId text, numero int, fechaTapa text, AnioInicio text, volumen text, idExterno text, resumen text, notas text, anio int, mes int, dia int, direccionWeb text, cantidadPaginas int, rating real, ratingExterno real, tipo text, fechaIngresoSistema text, fechaultimaActualizacion text, fechaultimaActualizacionSistemaExterno text)''')
+
+    cursor.execute('''DROP TABLE IF EXISTS config_directorios''')
+    cursor.execute('''CREATE TABLE config_Directorios (pathDirectorio text, PRIMARY KEY (pathDirectorio)) ''')
+    cursor.execute('''DROP TABLE IF EXISTS config_TipoArchivo''')
+    cursor.execute('''CREATE TABLE config_TipoArchivo (tipo text, PRIMARY KEY (tipo)) ''')
+    cursor.execute('''DROP TABLE IF EXISTS config_VineKeys''')
+    cursor.execute('''CREATE TABLE config_VineKeys (key text, PRIMARY KEY (key)) ''')
     cursor.execute('''DROP TABLE IF EXISTS config_VineKeysStatus''')
-##    cursor.execute('''DROP TABLE IF EXISTS Publishers''')
-##    cursor.execute('''CREATE TABLE config (id integer, PRIMARY KEY (id)) ''')
-##    cursor.execute('''DROP TABLE IF EXISTS ArcosArgumentales''')
-##    cursor.execute('''CREATE TABLE ArcosArgumentales (id integer, nombre text, descripcion text,  ultimaFechaActualizacion integer, PRIMARY KEY (id)) ''')
-##    cursor.execute('''DROP TABLE IF EXISTS ArcosArgumentalesComics''')
-##    cursor.execute('''CREATE TABLE ArcosArgumentalesComics (idArco integer, idComic integer , orden integer, PRIMARY KEY (idArco,idComic))''')
-##    cursor.execute('''DROP TABLE IF EXISTS Listas''')
-##    cursor.execute('''CREATE TABLE Listas (nombreLista text, sublistaDe text, descripcion text, nombreVista text, sqlText text, PRIMARY KEY (nombreLista))''')
-##  hora en la que se inicia el contador de consultas de vine. Si la diferencia entre fechaUltimaConsulta y fechaInicio es mas de una hora hay que reiniciar el contador de consultas y las fechas
-#   cursor.execute('''CREATE TABLE config_VineKeys (id integer, key text, PRIMARY KEY (id AUTOINCREMENT)) ''')
-##    cursor.execute('''CREATE TABLE config_VineKeysStatus (key text, recurso integer, cantidadTotalConsultas integer, fechaInicioConsultas, PRIMARY KEY (key,recurso)) ''')
-##    cursor.execute('''CREATE TABLE Publishers (id text, name text, deck text, description text, logoImagePath, PRIMARY KEY (id)) ''')
-##    cursor.execute('''CREATE TABLE config_TipoArchivo (id integer,tipo text, PRIMARY KEY (id , tipo)) ''')
-##    cursor.execute('''CREATE TABLE config_Directorios (id integer,pathDirectorio text, PRIMARY KEY (id , pathDirectorio)) ''')
+    ##  hora en la que se inicia el contador de consultas de vine. Si la diferencia entre fechaUltimaConsulta y fechaInicio es mas de una hora hay que reiniciar el contador de consultas y las fechas
+    cursor.execute('''CREATE TABLE config_VineKeysStatus (key text, recurso integer, cantidadTotalConsultas integer, horaUltimaConsulta, PRIMARY KEY (key,recurso)) ''')
+
+    cursor.execute('''DROP TABLE IF EXISTS Publishers''')
+    cursor.execute('''CREATE TABLE Publishers (id text, name text, deck text, description text, logoImagePath, PRIMARY KEY (id)) ''')
+    cursor.execute('''DROP TABLE IF EXISTS ArcosArgumentales''')
+    cursor.execute('''CREATE TABLE ArcosArgumentales (id integer, nombre text, descripcion text,  ultimaFechaActualizacion integer, PRIMARY KEY (id)) ''')
+    cursor.execute('''DROP TABLE IF EXISTS ArcosArgumentalesComics''')
+    cursor.execute('''CREATE TABLE ArcosArgumentalesComics (idArco integer, idComic integer , orden integer, PRIMARY KEY (idArco,idComic))''')
+
+    cursor.execute('''DROP TABLE IF EXISTS Listas''')
+    cursor.execute('''CREATE TABLE Listas (nombreLista text, sublistaDe text, descripcion text, nombreVista text, sqlText text, PRIMARY KEY (nombreLista))''')
+
 
 conn = sqlite3.connect('BabelComic.db')
 conn.row_factory = sqlite3.Row
 cur = conn.cursor()
 #testArcosArgumentales(cur)
-#createTables(cur)
+# createTables(cur)
 
-testVineKeys(cur)
+testKeyStatusTable(cur)
 
 #testSeriesTable(cur)
 #testGetSerie(cur,486667)

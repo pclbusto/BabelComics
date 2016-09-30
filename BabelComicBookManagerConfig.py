@@ -25,27 +25,39 @@ class BabelComicBookManagerConfig():
 
         cursor = self.conexion.cursor()
         # recuperamos la lista de tipos
-        cursor.execute('''SELECT tipo From config_TipoArchivo where id=?''', (1,))
+        cursor.execute('''SELECT tipo From config_TipoArchivo''')
         rows = cursor.fetchall()
         for row in rows:
             self.listaTipos.append(row['tipo'])
         # recuperamos la lista de directorios
-        cursor.execute('''SELECT pathDirectorio From config_Directorios where id=?''', (1,))
+        cursor.execute('''SELECT pathDirectorio From config_Directorios''')
         rows = cursor.fetchall()
         for row in rows:
             self.listaDirectorios.append(row['pathDirectorio'])
         # recuperamos la lista de claves
-        cursor.execute('''SELECT key  From config_VineKeys where id=?''', (1,))
+        cursor.execute('''SELECT key  From config_VineKeys''')
         rows = cursor.fetchall()
         for row in rows:
             # print(row['key'])
             self.listaClaves.append(row['key'])
+    def __initStatus__(self,clave):
+        cursor = self.conexion.cursor()
+        cursor.execute('''INSERT INTO config_VineKeysStatus (key, recurso, cantidadTotalConsultas, horaUltimaConsulta) values (?,?,?,?)''', (clave,'Series',0,0))
+        self.conexion.commit()
 
+        # cursor.execute('''SELECT key,recurso  From config_VineKeysStatus''')
+        # rows = cursor.fetchall()
+        # for row in rows:
+        #      print(row['key']+"        "+row['recurso'])
+        #
+        #
+        # print("cargando status clave")
     def addClave(self, clave):
         cursor = self.conexion.cursor()
         cursor.execute('''INSERT INTO config_VineKeys (key) values (?)''', (clave,))
         self.listaClaves.append(clave)
         self.conexion.commit()
+        self.__initStatus__(clave)
 
     def addTipo(self, tipo):
         cursor = self.conexion.cursor()
@@ -143,12 +155,13 @@ class BabelComicBookManagerConfig():
 
 if __name__ == "__main__":
     config = BabelComicBookManagerConfig()
-    #config.addClave('64f7e65686c40cc016b8b8e499f46d6657d26752')
-    #config.addClave('7e4368b71c5a66d710a62e996a660024f6a868d4')
+    config.addClave('64f7e65686c40cc016b8b8e499f46d6657d26752')
+    config.addClave('7e4368b71c5a66d710a62e996a660024f6a868d4')
+
     ##    config.addDirectorio('c:\\Users\\bustoped\\Downloads\\Comics\\')
     ##    config.delDirectorio('c:\\Users\\bustoped\\Downloads\\Comics\\')
     ##    config.addTipo('cbz')
-    cursor = config.conexion.cursor()
+    # cursor = config.conexion.cursor()
 
     ##    config.delTipo('cb7')
     ##    config.delDirectorio('home')
