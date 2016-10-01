@@ -194,7 +194,7 @@ class BabelComicVisor(Toplevel):
 
 if __name__=='__main__':
     root = Tk()
-    comic = ComicBooks().get('/home/pedro/Descargas/ftp/DC/Green_Lantern_v01_-_Sinestro_(2012)_(digital-Empire).cbr')
+    comic = ComicBooks().get('Green Lantern 047 (2016) (Digital-Empire).cbr')
     visor = BabelComicVisor(root,comic)
     visor.title = ('Babel Comics Visor')
     root.mainloop()

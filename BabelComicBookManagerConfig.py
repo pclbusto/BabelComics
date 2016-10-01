@@ -41,8 +41,14 @@ class BabelComicBookManagerConfig():
             # print(row['key'])
             self.listaClaves.append(row['key'])
     def __initStatus__(self,clave):
+        """
+        para la clave de comicvine cargamos para cada recurso (entidad por la cual se consulta {publisher, publishers, story_arc, series, etc}) la cantidad de consultas
+        y fecha inicio en 0. Esto es una inicializacion.
+        :param clave: key del sitio comicvine.
+        :return:None
+        """
         cursor = self.conexion.cursor()
-        cursor.execute('''INSERT INTO config_VineKeysStatus (key, recurso, cantidadTotalConsultas, horaUltimaConsulta) values (?,?,?,?)''', (clave,'Series',0,0))
+        cursor.execute('''INSERT INTO config_VineKeysStatus (key, recurso, cantidadTotalConsultas, fechaInicioConsulta) values (?,?,?,?)''', (clave,'volumes',0,0))
         self.conexion.commit()
 
         # cursor.execute('''SELECT key,recurso  From config_VineKeysStatus''')
@@ -51,7 +57,7 @@ class BabelComicBookManagerConfig():
         #      print(row['key']+"        "+row['recurso'])
         #
         #
-        # print("cargando status clave")
+        #print("cargando status clave")
     def addClave(self, clave):
         cursor = self.conexion.cursor()
         cursor.execute('''INSERT INTO config_VineKeys (key) values (?)''', (clave,))
@@ -69,7 +75,7 @@ class BabelComicBookManagerConfig():
         # este metodo busca para el recurso y la clave si tiene un status. Si lo tiene lo incrementa en uno
         # y le cambia la fecha de inicio. Esto es para evitar colgar las claves de comicvine.
         cursor = self.conexion.cursor()
-        cursor.execute('''SELECT  cantidadTotalConsultas, fechaInicioConsultas from  config_VineKeysStatus where key=? and recurso = ?''', (key, recurso, ))
+        cursor.execute('''SELECT  cantidadTotalConsultas, fechaUltimaConsulta from  config_VineKeysStatus where key=? and recurso = ?''', (key, recurso, ))
         rows = cursor.fetchall()
         existeStatus = False
         for row in rows:
@@ -77,11 +83,11 @@ class BabelComicBookManagerConfig():
             break
         if existeStatus:
             #actualizamos
-            cursor.execute('''UPDATE config_VineKeysStatus SET cantidadTotalConsultas = cantidadTotalConsultas+1 , fechaInicioConsultas = ? where key=? and recurso = ?''', (key, recurso, datetime.now(), ))
+            cursor.execute('''UPDATE config_VineKeysStatus SET cantidadTotalConsultas = cantidadTotalConsultas+1 , fechaUltimaConsulta = ? where key=? and recurso = ?''', (key, recurso, datetime.now(), ))
         else:
             #insertamos
             cursor.execute(
-                '''INSERT INTO config_VineKeysStatus (id , recurso, cantidadTotalConsultas, fechaInicioConsultas )''', (key, recurso, datetime.now()), )
+                '''INSERT INTO config_VineKeysStatus (id , recurso, cantidadTotalConsultas, fechaUltimaConsulta )''', (key, recurso, datetime.now()), )
         self.conexion.commit()
 
     def addDirectorio(self, directorio):
@@ -143,21 +149,28 @@ class BabelComicBookManagerConfig():
 
     def __getClaveMenosUsadaPorRecurso__(self, recurso):
         cursor = self.conexion.cursor()
-        cursor.execute('''SELECT top 1 key,min(cantidadTotalConsultas) as cantidadTotalConsultas FROM config_VineKeysStatus
-        WHERE recurso=?''', (recurso,))
-        rows = cursor.fetchall()
-
+        cursor.execute('''SELECT key,min(cantidadTotalConsultas) as cantidadTotalConsultas FROM config_VineKeysStatus WHERE recurso=?''', (recurso,))
+        row = cursor.fetchone()
+        if row:
+            self.updateStatus(row['key'],recurso)
+            return  row['key']
         return ""
-    def getClave(self, entidad):
-
-        return self.listaClaves[0]
-
+    def validarRecurso(self,recurso):
+        return recurso in ["volumes"]
+    def getClave(self, recurso):
+        if self.validarRecurso(recurso):
+            clave = self.__getClaveMenosUsadaPorRecurso__(recurso)
+            return clave
+        else:
+            print("no existe el recurso " + recurso)
+        return ""
 
 if __name__ == "__main__":
     config = BabelComicBookManagerConfig()
     config.addClave('64f7e65686c40cc016b8b8e499f46d6657d26752')
     config.addClave('7e4368b71c5a66d710a62e996a660024f6a868d4')
-
+    clave = config.getClave("volumes")
+    print(clave)
     ##    config.addDirectorio('c:\\Users\\bustoped\\Downloads\\Comics\\')
     ##    config.delDirectorio('c:\\Users\\bustoped\\Downloads\\Comics\\')
     ##    config.addTipo('cbz')
@@ -165,8 +178,9 @@ if __name__ == "__main__":
 
     ##    config.delTipo('cb7')
     ##    config.delDirectorio('home')
-    for dire in config.listaClaves:
-        print(dire)
+
+    #for dire in config.listaClaves:
+    #   print(dire)
 ##    config.addTipo('cb7')
 
 

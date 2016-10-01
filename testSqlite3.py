@@ -1,7 +1,5 @@
-from Serie import Serie
 import sqlite3
-import codecs
-import xml.etree.ElementTree as ET
+import datetime
 
 def testGetSerie(cursor,Id):
     """
@@ -37,7 +35,6 @@ def testSeriesTable(cursor):
     rows = cursor.fetchall()
     for row in rows:
         print(row['nombre'])
-
 
 def testComicsTable(cursor):
     cursor.execute('''SELECT NombreArchivo,titulo,rowid from comics where path like ?''',('%Flash%',))
@@ -121,7 +118,7 @@ def createTables(cursor):
     cursor.execute('''CREATE TABLE config_VineKeys (key text, PRIMARY KEY (key)) ''')
     cursor.execute('''DROP TABLE IF EXISTS config_VineKeysStatus''')
     ##  hora en la que se inicia el contador de consultas de vine. Si la diferencia entre fechaUltimaConsulta y fechaInicio es mas de una hora hay que reiniciar el contador de consultas y las fechas
-    cursor.execute('''CREATE TABLE config_VineKeysStatus (key text, recurso integer, cantidadTotalConsultas integer, horaUltimaConsulta, PRIMARY KEY (key,recurso)) ''')
+    cursor.execute('''CREATE TABLE config_VineKeysStatus (key text, recurso integer, cantidadTotalConsultas integer, fechaInicioConsulta, PRIMARY KEY (key,recurso)) ''')
 
     cursor.execute('''DROP TABLE IF EXISTS Publishers''')
     cursor.execute('''CREATE TABLE Publishers (id text, name text, deck text, description text, logoImagePath, PRIMARY KEY (id)) ''')
@@ -133,14 +130,25 @@ def createTables(cursor):
     cursor.execute('''DROP TABLE IF EXISTS Listas''')
     cursor.execute('''CREATE TABLE Listas (nombreLista text, sublistaDe text, descripcion text, nombreVista text, sqlText text, PRIMARY KEY (nombreLista))''')
 
+    cursor.execute('''DROP TABLE IF EXISTS tiempo''')
+    cursor.execute('''CREATE TABLE tiempo (key integer, tiempo integer, PRIMARY KEY (key))''')
+
+def testTimeTable(cursor):
+    cursor.execute('''insert into tiempo (key, tiempo) values (1,?)''',(date))
+    conn.commit()
+    cursor.execute('''select * from tiempo''')
+
+    rows = cursor.fetchall()
+    for row in rows:
+        print(row['key'], datetime.datetime.fromordinal(row['tiempo']))
 
 conn = sqlite3.connect('BabelComic.db')
 conn.row_factory = sqlite3.Row
 cur = conn.cursor()
 #testArcosArgumentales(cur)
-# createTables(cur)
+createTables(cur)
 
-testKeyStatusTable(cur)
+testTimeTable(cur)
 
 #testSeriesTable(cur)
 #testGetSerie(cur,486667)
