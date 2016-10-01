@@ -71,23 +71,16 @@ class BabelComicBookManagerConfig():
         self.listaTipos.append(tipo)
         self.conexion.commit()
 
-    def updateStatus(self, key, recurso):
-        # este metodo busca para el recurso y la clave si tiene un status. Si lo tiene lo incrementa en uno
-        # y le cambia la fecha de inicio. Esto es para evitar colgar las claves de comicvine.
+    def __updateStatus__(self, key, recurso):
+        '''
+        para la clave key  y el recurso recurso incrementa en uno el contador.
+        :param key: clave de vine comic
+        :param recurso: identifica si es volumes, comic, editoria, etc
+        :return: None
+        '''
         cursor = self.conexion.cursor()
-        cursor.execute('''SELECT  cantidadTotalConsultas, fechaHoraInicioConsulta from  config_VineKeysStatus where key=? and recurso = ?''', (key, recurso, ))
-        rows = cursor.fetchall()
-        existeStatus = False
-        for row in rows:
-            existeStatus = True
-            break
-        if existeStatus:
-            #actualizamos
-            cursor.execute('''UPDATE config_VineKeysStatus SET cantidadTotalConsultas = cantidadTotalConsultas+1 , fechaHoraInicioConsulta = ? where key=? and recurso = ?''', (key, recurso, datetime.now(), ))
-        else:
-            #insertamos
-            cursor.execute(
-                '''INSERT INTO config_VineKeysStatus (id , recurso, cantidadTotalConsultas, fechaHoraInicioConsulta )''', (key, recurso, datetime.now()), )
+        #actualizamos
+        cursor.execute('''UPDATE config_VineKeysStatus SET cantidadTotalConsultas = cantidadTotalConsultas+1 , fechaHoraInicioConsulta = :fechaHoraInicioConsulta where key=:key and recurso = :recurso''', {"key":key, "recurso":recurso, "fechaHoraInicioConsulta":datetime.now().timestamp()})
         self.conexion.commit()
 
     def addDirectorio(self, directorio):
@@ -152,7 +145,7 @@ class BabelComicBookManagerConfig():
         cursor.execute('''SELECT key,min(cantidadTotalConsultas) as cantidadTotalConsultas FROM config_VineKeysStatus WHERE recurso=?''', (recurso,))
         row = cursor.fetchone()
         if row:
-            self.updateStatus(row['key'],recurso)
+            self.__updateStatus__(row['key'],recurso)
             return  row['key']
         return ""
     def validarRecurso(self,recurso):
