@@ -118,7 +118,7 @@ def createTables(cursor):
     cursor.execute('''CREATE TABLE config_VineKeys (key text, PRIMARY KEY (key)) ''')
     cursor.execute('''DROP TABLE IF EXISTS config_VineKeysStatus''')
     ##  hora en la que se inicia el contador de consultas de vine. Si la diferencia entre fechaUltimaConsulta y fechaInicio es mas de una hora hay que reiniciar el contador de consultas y las fechas
-    cursor.execute('''CREATE TABLE config_VineKeysStatus (key text, recurso integer, cantidadTotalConsultas integer, fechaInicioConsulta, PRIMARY KEY (key,recurso)) ''')
+    cursor.execute('''CREATE TABLE config_VineKeysStatus (key text, recurso integer, cantidadTotalConsultas integer, fechaHoraInicioConsulta, PRIMARY KEY (key,recurso)) ''')
 
     cursor.execute('''DROP TABLE IF EXISTS Publishers''')
     cursor.execute('''CREATE TABLE Publishers (id text, name text, deck text, description text, logoImagePath, PRIMARY KEY (id)) ''')
@@ -131,16 +131,16 @@ def createTables(cursor):
     cursor.execute('''CREATE TABLE Listas (nombreLista text, sublistaDe text, descripcion text, nombreVista text, sqlText text, PRIMARY KEY (nombreLista))''')
 
     cursor.execute('''DROP TABLE IF EXISTS tiempo''')
-    cursor.execute('''CREATE TABLE tiempo (key integer, tiempo integer, PRIMARY KEY (key))''')
+    cursor.execute('''CREATE TABLE tiempo (key integer, tiempo real, PRIMARY KEY (key))''')
 
 def testTimeTable(cursor):
-    cursor.execute('''insert into tiempo (key, tiempo) values (1,?)''',(date))
+    cursor.execute('''insert into tiempo (key, tiempo) values (1,?)''',(datetime.datetime.now().timestamp(),))
     conn.commit()
     cursor.execute('''select * from tiempo''')
 
     rows = cursor.fetchall()
     for row in rows:
-        print(row['key'], datetime.datetime.fromordinal(row['tiempo']))
+        print(row['key'], datetime.datetime.fromtimestamp(row['tiempo']))
 
 conn = sqlite3.connect('BabelComic.db')
 conn.row_factory = sqlite3.Row
