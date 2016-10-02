@@ -162,9 +162,10 @@ class ComicVineSearcher():
             'http://www.comicvine.com/api/' + self.entidad + '/?api_key=' + self.vinekey + self.filter + '&offset=' + str(
                 self.offset) + '&sort=date_added:asc')
         html = response.read()
-
+        print(html.decode())
         xml = html.decode()
-        root = ET.fromstring(xml)
+        parser = ET.XMLParser(encoding="utf-8",recover=True)
+        root = ET.fromstring(xml, parser=parser)
         self.statusCode = int(root.find('status_code').text)
         if self.statusCode == 1:
             #esto puede ser el limite de resultados por pag o menos que esto cuando es l ultima pagina

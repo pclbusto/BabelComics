@@ -134,19 +134,19 @@ def createTables(cursor):
     cursor.execute('''CREATE TABLE tiempo (key integer, tiempo real, PRIMARY KEY (key))''')
 
 def testTimeTable(cursor):
-    cursor.execute('''insert into tiempo (key, tiempo) values (1,?)''',(datetime.datetime.now().timestamp(),))
-    conn.commit()
-    cursor.execute('''select * from tiempo''')
+    #cursor.execute('''insert into tiempo (key, tiempo) values (1,?)''',(datetime.datetime.now().timestamp(),))
+    #conn.commit()
+    cursor.execute('''select * from config_VineKeysStatus''')
 
     rows = cursor.fetchall()
     for row in rows:
-        print(row['key'], datetime.datetime.fromtimestamp(row['tiempo']))
+        print(row['key'], datetime.datetime.fromtimestamp(row['fechaHoraInicioConsulta']))
 
 conn = sqlite3.connect('BabelComic.db')
 conn.row_factory = sqlite3.Row
 cur = conn.cursor()
 #testArcosArgumentales(cur)
-createTables(cur)
+#createTables(cur)
 
 testTimeTable(cur)
 
