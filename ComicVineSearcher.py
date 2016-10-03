@@ -2,7 +2,6 @@ from Publishers import *
 from ComicBook import ComicBook
 from ArcoArgumental import *
 from Serie import Serie
-from Series import Series
 import datetime
 import urllib.request
 import xml.etree.ElementTree as ET
@@ -164,8 +163,10 @@ class ComicVineSearcher():
         html = response.read()
         print(html.decode())
         xml = html.decode()
-        parser = ET.XMLParser(encoding="utf-8",recover=True)
-        root = ET.fromstring(xml, parser=parser)
+        #xml = xml[:130640]+xml[130642:]
+
+        parser = ET.XMLParser(encoding="utf-8")
+        root = ET.fromstring(xml, parser= parser)
         self.statusCode = int(root.find('status_code').text)
         if self.statusCode == 1:
             #esto puede ser el limite de resultados por pag o menos que esto cuando es l ultima pagina

@@ -43,31 +43,28 @@ class BabelComicBookManagerConfig():
     def __initStatus__(self,clave):
         """
         para la clave de comicvine cargamos para cada recurso (entidad por la cual se consulta {publisher, publishers, story_arc, series, etc}) la cantidad de consultas
-        y fecha inicio en 0. Esto es una inicializacion.
+        y fecha inicio en 0. Esto es una inicializacion. Si existe para esa clave un status se deja. Esta situación ocurre cuando se modifica algo de la conf. La Gui borra las claves
+        y las vuelve a cargar nuevamente.
         :param clave: key del sitio comicvine.
         :return:None
         """
         cursor = self.conexion.cursor()
-        cursor.execute('''INSERT INTO config_VineKeysStatus (key, recurso, cantidadTotalConsultas, fechaHoraInicioConsulta) values (?,?,?,?)''', (clave,'volumes',0,datetime.now().timestamp()))
+        cursor.execute('''SELECT key FROM config_VineKeysStatus WHERE key=:key AND recurso=:recurso''', {"key": clave,"recurso":'volumes'})
+        row = cursor.fetchone()
+        if (not row):
+            cursor.execute('''INSERT INTO config_VineKeysStatus (key, recurso, cantidadTotalConsultas, fechaHoraInicioConsulta) values (?,?,?,?)''', (clave,'volumes',0,datetime.now().timestamp()))
         self.conexion.commit()
 
-        # cursor.execute('''SELECT key,recurso  From config_VineKeysStatus''')
-        # rows = cursor.fetchall()
-        # for row in rows:
-        #      print(row['key']+"        "+row['recurso'])
-        #
-        #
-        #print("cargando status clave")
     def addClave(self, clave):
         cursor = self.conexion.cursor()
-        cursor.execute('''INSERT INTO config_VineKeys (key) values (?)''', (clave,))
+        cursor.execute('''INSERT INTO config_VineKeys (key) values (:key)''', {"key":clave})
         self.listaClaves.append(clave)
         self.conexion.commit()
         self.__initStatus__(clave)
 
     def addTipo(self, tipo):
         cursor = self.conexion.cursor()
-        cursor.execute('''INSERT INTO config_TipoArchivo (id,tipo) values (?,?)''', (1, tipo,))
+        cursor.execute('''INSERT INTO config_TipoArchivo (tipo) values (:tipo)''', {"tipo":tipo})
         self.listaTipos.append(tipo)
         self.conexion.commit()
 
@@ -85,7 +82,7 @@ class BabelComicBookManagerConfig():
 
     def addDirectorio(self, directorio):
         cursor = self.conexion.cursor()
-        cursor.execute('''INSERT INTO config_Directorios (id,pathDirectorio) values (?,?)''', (1, directorio,))
+        cursor.execute('''INSERT INTO config_Directorios (pathDirectorio) values (:path)''', {"path":directorio})
         self.listaDirectorios.append(directorio)
         self.conexion.commit()
 

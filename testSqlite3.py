@@ -148,7 +148,7 @@ cur = conn.cursor()
 #testArcosArgumentales(cur)
 #createTables(cur)
 
-testTimeTable(cur)
+#testTimeTable(cur)
 
 #testSeriesTable(cur)
 #testGetSerie(cur,486667)
@@ -156,13 +156,12 @@ testTimeTable(cur)
 
 #conn.execute('''insert into  listas (nombreLista, sublistaDe,descripcion,nombreVista, sqlText)
 #values ('biblioteca', '','','biblioteca','create view biblioteca as select * from comics')''')
-# conn.execute('''drop view  IF EXISTS biblioteca''')
-#
-# conn.execute('''create view biblioteca as select distinct *,comics.rowid as comicRowId from comics as comics
-# join series as series on serieId = series.id
-# join Publishers on Publishers.id= publisherId
-# left join ArcosArgumentalesComics on ArcosArgumentalesComics.idComic = idExterno
-# left join ArcosArgumentales on ArcosArgumentales.id = ArcosArgumentalesComics.idArco''')
+conn.execute('''drop view  IF EXISTS biblioteca''')
+conn.execute('''create view biblioteca as select distinct *,comics.rowid as comicRowId from comics as comics
+ left join series as series on serieId = series.id
+ left join Publishers on Publishers.id= publisherId
+ left join ArcosArgumentalesComics on ArcosArgumentalesComics.idComic = idExterno
+ left join ArcosArgumentales on ArcosArgumentales.id = ArcosArgumentalesComics.idArco''')
 #
 # conn.execute('''drop view  IF EXISTS BlackestNight''')
 # conn.execute('''create view BlackestNight as select distinct * from biblioteca

@@ -44,6 +44,7 @@ class PanelThumbnailComics(Canvas):
     def loadAndCreateThumbnails(self):
         x = 0
         y = 0
+        print("cantidad de comics: ",len(self.listaComics))
         self.cantidadThumnailsAGenerar = len(self.listaComics)
         self.cantidadThumnailsGenerados = 0
         if not os.path.exists("coversThumbnails"):

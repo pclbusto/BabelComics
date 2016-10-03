@@ -23,7 +23,7 @@ class BabelComicConfigGui(Frame):
         ttk.Button(self.frameDirectorios, text='+', width=1, command=self.openDirectoryChooser).grid(column=1, row=1,
                                                                                                      sticky=N)
         ttk.Button(self.frameDirectorios, width=1, text='-', command=self.delDirectorio).grid(column=1, row=2, sticky=N)
-        self.listaDirectorios = Listbox(self.frameDirectorios)
+        self.listaDirectorios = Listbox(self.frameDirectorios, width = 45)
         self.listaDirectorios.grid(column=0, row=1, rowspan=2, sticky=(N, S, W, E))
         # agregado vinekeys
         self.frameClaves = ttk.LabelFrame(self)
@@ -32,7 +32,7 @@ class BabelComicConfigGui(Frame):
         ttk.Label(self.frameClaves, text='Lista de Claves').grid(column=0, row=0, sticky=(W))
         ttk.Button(self.frameClaves, text='+', width=1, command=self.openClaveEntry).grid(column=1, row=1, sticky=N)
         ttk.Button(self.frameClaves, width=1, text='-', command=self.delClave).grid(column=1, row=2, sticky=N)
-        self.listaClaves = Listbox(self.frameClaves)
+        self.listaClaves = Listbox(self.frameClaves,width = 45)
         # campo extensiones para usar en la ventana
         self.clave = StringVar()
         self.claveEntry = None
@@ -57,6 +57,7 @@ class BabelComicConfigGui(Frame):
                                                                                             columnspan=2, sticky=W)
 
         self.listaClaves.grid(column=0, row=1, rowspan=2, sticky=(N, S, W, E))
+        #self.listaClaves.config(width = 45)
         self.frameClaves.grid(sticky=(N, S, W, E), column=1, row=0)
 
     def openDirectoryChooser(self):
@@ -70,7 +71,7 @@ class BabelComicConfigGui(Frame):
 
     def save(self):
         directorios = [item for item in self.listaDirectorios.get(0, self.listaDirectorios.size())]
-        claves = [item for item in self.listaClaves.get(0, self.listaClaves.size())]
+        claves = [item for item in self.listaClaves.get(0, END)]
         self.babelComicConfig.setListaDirectorios(directorios)
         self.babelComicConfig.setListaTipos(self.extensionVar.get().split(','))
         self.babelComicConfig.setListaClaves(claves)
