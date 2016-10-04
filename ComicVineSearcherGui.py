@@ -173,6 +173,7 @@ class ComicCatalogerGui(Frame):
         # recuperarla de la configuracion
         config = BabelComicBookManagerConfig()
 
+
         buscador = ComicVineSearcher(config.getClave("issues"))
 
         buscador.setEntidad('issues')

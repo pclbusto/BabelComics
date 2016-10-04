@@ -7,6 +7,7 @@ import urllib.request
 import xml.etree.ElementTree as ET
 
 
+
 class ComicVineSearcher():
     def __init__(self, vinekey):
         self.__EntidadesPermitidas__ = ['issues', 'volumes', 'publishers', 'issue', 'story_arc_credits']

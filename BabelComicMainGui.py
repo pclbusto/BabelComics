@@ -78,6 +78,7 @@ def openComicVine():
         window.geometry('+0+0')
         comics = ComicBooks()
         comic = panelComics.getComicActual()
+
         cvs = ComicCatalogerGui(window, comic)
         #cvs.grid(sticky=(N, W, S, E))
         cvs.grid()

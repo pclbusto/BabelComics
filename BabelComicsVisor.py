@@ -68,6 +68,7 @@ class BabelComicVisor(Toplevel):
         print(self.winfo_width())
         print("clicked: "+str(event.x))
 
+
     def abrirComic(self):
         global comic,indicePaginaActual,paginas
         cbz = filedialog.askopenfile('r',initialdir='/home/pedro/Descargas/ftp/',filetypes = [("comic","*.cbz")])

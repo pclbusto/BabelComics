@@ -4,6 +4,7 @@ from ComicBooks import *
 from pathlib import Path
 import threading
 from BabelComicBookManagerConfig import *
+
 import sqlite3
 
 
