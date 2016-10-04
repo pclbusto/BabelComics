@@ -33,10 +33,14 @@ class ComicCatalogerGui(Frame):
         serie = series.get(comicbook.serieId)
         if (series.status == 0):
             print('No se pudo recueperar la serie')
+            nombreSerie = ttk.Label(panelInfo, text='Serie: ' + "")
+            numerode = ttk.Label(panelInfo, text='Número: ' + str(comicbook.numero) + ' de ' + str(0))
+        else:
+            nombreSerie = ttk.Label(panelInfo, text='Serie: ' + serie.nombre)
+            numerode = ttk.Label(panelInfo,text='Número: ' + str(comicbook.numero) + ' de ' + str(serie.cantidadNumeros))
         archivo = ttk.Label(panelInfo, text='Archivo: ' + comicbook.getNombreArchivo())
-        nombreSerie = ttk.Label(panelInfo, text='Serie: ' + serie.nombre)
         tituloEjemplar = ttk.Label(panelInfo, text='Título: ' + comicbook.titulo)
-        numerode = ttk.Label(panelInfo, text='Número: ' + str(comicbook.numero) + ' de ' + str(serie.cantidadNumeros))
+
         arcoAlternativo = ttk.Label(panelInfo, text='Fecha Tapa: ' + comicbook.fechaTapa)
         archivo.grid(sticky=(W), padx=5)
         nombreSerie.grid(sticky=(W), padx=5)
@@ -167,9 +171,10 @@ class ComicCatalogerGui(Frame):
 
     def buscarSerie(self):
         # recuperarla de la configuracion
+        config = BabelComicBookManagerConfig()
 
-        buscador = ComicVineSearcher('7e4368b71c5a66d710a62e996a660024f6a868d4')
-        # buscador.setEntidad('volumes')
+        buscador = ComicVineSearcher(config.getClave("issues"))
+
         buscador.setEntidad('issues')
         if (self.entrySerie.get()):
             buscador.addFilter('volume:' + self.entrySerie.get())

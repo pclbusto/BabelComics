@@ -139,7 +139,8 @@ Values(?,?,?,?,?,?,?)''', (
 
         comic_searcher.setEntidad('volumes')
         lista_series = series.getList('')
-        comic_searcher.vineSearch(len(lista_series)+1)
+        #comic_searcher.vineSearch(len(lista_series)+1)
+        comic_searcher.vineSearch(67700)
         for serie in comic_searcher.listaBusquedaVine:
             self.add(serie)
         print('porcentaje completado: '+str((100*(len(lista_series)/comic_searcher.cantidadResultados))))

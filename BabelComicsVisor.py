@@ -49,19 +49,24 @@ class BabelComicVisor(Toplevel):
 
         self.scrollbarY.config(command=self.canvas.yview)
         self.scrollbarX.config(command=self.canvas.xview)
-
+        self.bind("<Button-1>",self.click)
         self.canvas.pack(side=BOTTOM, expand=YES, fill=BOTH)
 
         ##Tener cuidado cuando se hace el pack no se puede hacer en cualquier orden
         self.mainframe.pack(side=BOTTOM, expand=YES, fill=BOTH)
         self.canvas.config(scrollregion=self.canvas.bbox(ALL))
 
-        ##root.config(height=root.winfo_screenheight(),width = root.winfo_screenmmwidth())
-        #self.mainloop()
-    #comic = zipfile.ZipFile('BabelComics.cbz','r')
-#indicePaginaActual=0
-#paginas = comic.namelist()
-#idImagen = None
+
+    def click(self,event):
+        if (event.x>self.winfo_width()/2):
+            event.keycode=117
+            self.scrollupKeyboard(event)
+        else:
+            event.keycode=112
+            self.scrollupKeyboard(event)
+
+        print(self.winfo_width())
+        print("clicked: "+str(event.x))
 
     def abrirComic(self):
         global comic,indicePaginaActual,paginas
@@ -194,7 +199,7 @@ class BabelComicVisor(Toplevel):
 
 if __name__=='__main__':
     root = Tk()
-    comic = ComicBooks().get('Green Lantern 047 (2016) (Digital-Empire).cbr')
+    comic = ComicBooks().get('C:\\Users\\pclbu\\Documents\\Comics\\Green Lantern 047 (2016) (Digital-Empire).cbr')
     visor = BabelComicVisor(root,comic)
     visor.title = ('Babel Comics Visor')
     root.mainloop()

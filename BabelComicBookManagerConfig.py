@@ -146,7 +146,7 @@ class BabelComicBookManagerConfig():
             return  row['key']
         return ""
     def validarRecurso(self,recurso):
-        return recurso in ["volumes"]
+        return recurso in ["volumes","issues"]
     def getClave(self, recurso):
         if self.validarRecurso(recurso):
             clave = self.__getClaveMenosUsadaPorRecurso__(recurso)
