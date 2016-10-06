@@ -204,8 +204,8 @@ class SeriesLookupGui(Frame):
         filtro = ''
         filtrosNoVacios = {}
         listaValores = []
-        # al parecer el for acede a la estructura en forma paralela y no tengo forma de determinar el primero. por esto haces lo siguiente
-        # sacamos las listas filtros vacias y solo dejamos la que tienen valores despues opbtenemos la lista en la pos 1 y despues concatenemos el resto
+        # al parecer el for acede a la estructura en forma paralela y no tengo forma de determinar el primero. por esto se hace lo siguiente
+        # sacamos las listas filtros vacias y solo dejamos la que tienen valores despues obtenemos la lista en la pos 1 y despues concatenemos el resto
         for nombreLista in self.filtros.keys():
             if len(self.filtros[nombreLista]) > 0:
                 print('lista: ' + nombreLista + ' long: ' + str(len(self.filtros[nombreLista])))
