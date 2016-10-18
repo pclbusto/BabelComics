@@ -1,6 +1,8 @@
 import codecs
+from BabelComicBookManagerConfig import *
 import xml.etree.ElementTree as ET
 import sqlite3
+from ComicVineSearcher import *
 
 
 
@@ -106,11 +108,27 @@ name=?,description=?,deck=?,logoImagePath=? where id=?''', (publisher.name,publi
     def close(self):
         self.conexion.close()
 
+    def searchInComicVineComicVine(self, filtro):
+        config = BabelComicBookManagerConfig()
+        clave = config.getClave('publishers')
+        comic_searcher = ComicVineSearcher(clave)
+        comic_searcher.setEntidad('publishers')
+        comic_searcher.addFilter("name:"+filtro.replace(" ","%20"))
+        comic_searcher.vineSearch(0)
+        for publisher in comic_searcher.listaBusquedaVine:
+            print(publisher.logoImagePath)
+            #self.add(serie)
+        #print('porcentaje completado: ' + str((100 * (len(lista_series) / comic_searcher.cantidadResultados))))
+
+
 if __name__ == "__main__":
+
 
 ##67600 dio error
 ##67700 dio error
     publishers = Publishers()
+    publishers.searchInComicVineComicVine("Marvel")
+
 ##    publishers.rmAll()
 ##    series.loadFromFiles()
 ##    series.rmAll()

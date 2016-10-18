@@ -9,8 +9,9 @@ import xml.etree.ElementTree as ET
 
 
 class ComicVineSearcher():
+    EntidadesPermitidas = ['issues', 'volumes', 'publishers', 'issue', 'story_arc_credits']
     def __init__(self, vinekey):
-        self.__EntidadesPermitidas__ = ['issues', 'volumes', 'publishers', 'issue', 'story_arc_credits']
+
         self.vinekey = vinekey
         self.filter = ''  # el usuario deberia pasar nombreCampo:<valor>,...,nombreCampo:<valor> el nombre del campo depende de la entidad
         self.entidad = ''
@@ -50,7 +51,7 @@ class ComicVineSearcher():
             ##                item[7],'---',item[1],'---', item[3])
 
     def setEntidad(self, entidad):
-        if entidad in self.__EntidadesPermitidas__:
+        if entidad in ComicVineSearcher.EntidadesPermitidas:
             self.entidad = entidad
             self.filter = ''
             del self.listaBusquedaVine[:]
@@ -155,14 +156,20 @@ class ComicVineSearcher():
             ##            print('falta ingresar la entidad')
             return
         self.offset = io_offset
-        response = urllib.request.urlopen(
-            'http://www.comicvine.com/api/' + self.entidad + '/?api_key=' + self.vinekey + self.filter + '&offset=' + str(
-                self.offset) + '&sort=id:asc')
+
         print(
             'http://www.comicvine.com/api/' + self.entidad + '/?api_key=' + self.vinekey + self.filter + '&offset=' + str(
                 self.offset) + '&sort=date_added:asc')
+        response = urllib.request.urlopen(
+            'http://www.comicvine.com/api/' + self.entidad + '/?api_key=' + self.vinekey + self.filter + '&offset=' + str(
+                self.offset) + '&sort=id:asc')
+
+        #response = urllib.request.urlopen('http://comicvine.gamespot.com/api/publishers/?api_key=64f7e65686c40cc016b8b8e499f46d6657d26752&filter=name:DC%20comics&offset=0&sort=date_added:asc')
+
+
+
         html = response.read()
-        print(html.decode())
+        #print(html.decode())
         xml = html.decode()
         #xml = xml[:130640]+xml[130642:]
 
@@ -231,7 +238,8 @@ class ComicVineSearcher():
                                                    'deck': publisher.deck,
                                                    'logoImagePath': publisher.logoImagePath})
                     '''
-                    Publishers().add(publisher)
+                    self.listaBusquedaVine.append(publisher)
+                    #Publishers().add(publisher)
             self.statusMessage = 'Recuperados: ' + str(self.offset) + ' de ' + str(self.cantidadResultados)
 
         elif self.statusCode == 100:

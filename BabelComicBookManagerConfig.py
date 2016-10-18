@@ -1,5 +1,6 @@
 import sqlite3
 from datetime import datetime
+from ComicVineSearcher import *
 
 '''
 
@@ -52,7 +53,8 @@ class BabelComicBookManagerConfig():
         cursor.execute('''SELECT key FROM config_VineKeysStatus WHERE key=:key AND recurso=:recurso''', {"key": clave,"recurso":'volumes'})
         row = cursor.fetchone()
         if (not row):
-            cursor.execute('''INSERT INTO config_VineKeysStatus (key, recurso, cantidadTotalConsultas, fechaHoraInicioConsulta) values (?,?,?,?)''', (clave,'volumes',0,datetime.now().timestamp()))
+            for entidad in ComicVineSearcher.EntidadesPermitidas:
+                cursor.execute('''INSERT INTO config_VineKeysStatus (key, recurso, cantidadTotalConsultas, fechaHoraInicioConsulta) values (?,?,?,?)''', (clave,entidad,0,datetime.datetime.now().timestamp() ))
         self.conexion.commit()
 
     def addClave(self, clave):
@@ -77,7 +79,7 @@ class BabelComicBookManagerConfig():
         '''
         cursor = self.conexion.cursor()
         #actualizamos
-        cursor.execute('''UPDATE config_VineKeysStatus SET cantidadTotalConsultas = cantidadTotalConsultas+1 , fechaHoraInicioConsulta = :fechaHoraInicioConsulta where key=:key and recurso = :recurso''', {"key":key, "recurso":recurso, "fechaHoraInicioConsulta":datetime.now().timestamp()})
+        cursor.execute('''UPDATE config_VineKeysStatus SET cantidadTotalConsultas = cantidadTotalConsultas+1 , fechaHoraInicioConsulta = :fechaHoraInicioConsulta where key=:key and recurso = :recurso''', {"key":key, "recurso":recurso, "fechaHoraInicioConsulta":datetime.datetime.now().timestamp()})
         self.conexion.commit()
 
     def addDirectorio(self, directorio):
@@ -146,10 +148,9 @@ class BabelComicBookManagerConfig():
             return  row['key']
         return ""
     def validarRecurso(self,recurso):
-        return recurso in ["volumes","issues"]
+        return recurso in ["volumes","issues", "publishers"]
     def getClave(self, recurso):
         if self.validarRecurso(recurso):
-
             clave = self.__getClaveMenosUsadaPorRecurso__(recurso)
             return clave
         else:
@@ -158,6 +159,7 @@ class BabelComicBookManagerConfig():
 
 if __name__ == "__main__":
     config = BabelComicBookManagerConfig()
+    config.__delAllClaves__()
     config.addClave('64f7e65686c40cc016b8b8e499f46d6657d26752')
     config.addClave('7e4368b71c5a66d710a62e996a660024f6a868d4')
     clave = config.getClave("volumes")
