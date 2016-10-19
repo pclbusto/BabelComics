@@ -13,7 +13,7 @@ class KivyPublisherGui(Screen):
 class Test(App):
 
     def build(self):
-        layout2 = ScatterLayout(do_rotation = False, rotation =90,pos_hint= {'center_x': 0.5, 'center_y': 0.5})
+        #layout2 = ScatterLayout(do_rotation = False, rotation =90,pos_hint= {'center_x': 0.5, 'center_y': 0.5})
         layout = GridLayout(cols=4,pos=(0,0))
         layout.add_widget(Button(text="boton1"))
         layout.add_widget(Button(text="boton2"))
@@ -23,8 +23,8 @@ class Test(App):
         layout.add_widget(Button(text="boton2"))
         layout.add_widget(Button(text="boton3"))
         layout.add_widget(Button(text="boton4"))
-        layout2.add_widget(layout)
-        return layout2
+        #layout2.add_widget(layout)
+        return layout
         #return KivyPublisherGui()
 
 

@@ -152,7 +152,7 @@ if __name__ == "__main__":
     series = Series()
     #series.getList('', None, 'order by nombre desc')
     #series.rmAll()
-    for i in range(1,2):
+    for i in range(1,50):
         series.loadDataFromComicVine()
 
 
