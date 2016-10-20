@@ -132,7 +132,7 @@ if __name__ == "__main__":
 ##    publishers.rmAll()
 ##    series.loadFromFiles()
 ##    series.rmAll()
-##    publisher = Publisher('0','Sin Editoria')
+##    publisher = Publisher('0','Sin Editoriaasa')
 ##    publishers.add(publisher)
 ##    series.rm('-1')
 ##    series.add(serie)
