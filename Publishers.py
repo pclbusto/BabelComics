@@ -116,7 +116,7 @@ name=?,description=?,deck=?,logoImagePath=? where id=?''', (publisher.name,publi
         comic_searcher.addFilter("name:"+filtro.replace(" ","%20"))
         comic_searcher.vineSearch(0)
         for publisher in comic_searcher.listaBusquedaVine:
-            print(publisher.logoImagePath)
+            print(publisher.name)
             #self.add(serie)
         #print('porcentaje completado: ' + str((100 * (len(lista_series) / comic_searcher.cantidadResultados))))
 
