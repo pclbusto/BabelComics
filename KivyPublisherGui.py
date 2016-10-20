@@ -2,14 +2,15 @@ from kivy.app import App
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.screenmanager import *
 from kivy.uix.scrollview import ScrollView
-from kivy.uix.gridlayout import GridLayout
+from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 from kivy.uix.scatterlayout import ScatterLayout
 from kivy.uix.scatter import ScatterPlane
 from kivy.uix.image import Image
-from kivy.uix.widget import Widget
+from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.button import Label
-
+from kivy.uix.scrollview import ScrollView
+from kivy.core.window import Window
 
 class KivyPublisherGui(Screen):
     def __init__(self,**kwargs):
@@ -17,27 +18,58 @@ class KivyPublisherGui(Screen):
         self.label = Label(text="Cover Title test")
         self.layout.add_widget(self.label)
 
-class PublisherPanel(GridLayout):
-    def __init__(self,**kwargs):
-        super(Widget, self).__init__(**kwargs)
-        self.add_widget(GridLayout(cols=1))
-        l1 = Image(source='8.jpg', size=(256, 256))
+class PublisherPanel(BoxLayout):
+    def __init__(self, **kwargs):
+        # make sure we aren't overriding any important functionality
+        super(PublisherPanel, self).__init__(**kwargs)
+        self.orientation='vertical'
+        self.size_hint=(1,1)
+        logo = Image(source='8.jpg')
+        self.add_widget(logo)
+        self.add_widget(Label(text="test label de publisher",size_hint=(1,0.1)))
+        self.size_hint_y=None
+        self.height=140
 
 class Test(App):
     def build(self):
-        #layout2 = ScatterLayout(do_rotation = False, rotation =90,pos_hint= {'center_x': 0.5, 'center_y': 0.5})
-
-        layout = GridLayout(cols=1,pos=(0,0))
-        layout.add_widget(PublisherPanel())
-        #s = ScatterPlane(scale=.5)
-
-        #s.add_widget(l1)
-        #layout.add_widget(l1)
-        #layout2.add_widget(layout)
-        return layout
-        #return KivyPublisherGui()
-
-
+        grid = BoxLayout(orientation='horizontal',size_hint=(1, None),height=160)
+        # grid.bind(minimum_height=grid.setter('height'))
+        grid.add_widget(PublisherPanel())
+        grid.add_widget(PublisherPanel())
+        grid.add_widget(PublisherPanel())
+        grid.add_widget(PublisherPanel())
+        grid.add_widget(PublisherPanel())
+        grid.add_widget(PublisherPanel())
+        grid.add_widget(PublisherPanel())
+        grid.add_widget(PublisherPanel())
+        grid.add_widget(PublisherPanel())
+        grid.add_widget(PublisherPanel())
+        grid.add_widget(PublisherPanel())
+        grid.add_widget(PublisherPanel())
+        grid.add_widget(PublisherPanel())
+        grid.add_widget(PublisherPanel())
+        grid.add_widget(PublisherPanel())
+        grid.add_widget(PublisherPanel())
+        grid.add_widget(PublisherPanel())
+        grid.add_widget(PublisherPanel())
+        grid.add_widget(PublisherPanel())
+        grid.add_widget(PublisherPanel())
+        grid.add_widget(PublisherPanel())
+        grid.add_widget(PublisherPanel())
+        grid.add_widget(PublisherPanel())
+        grid.add_widget(PublisherPanel())
+        grid.add_widget(PublisherPanel())
+        grid.add_widget(PublisherPanel())
+        grid.add_widget(PublisherPanel())
+        grid.add_widget(PublisherPanel())
+        grid.add_widget(PublisherPanel())
+        grid.add_widget(PublisherPanel())
+        grid.add_widget(PublisherPanel())
+        grid.add_widget(PublisherPanel())
+        scroll = ScrollView(size_hint=(None,1), size=(Window.width, Window.height))
+        scroll.do_scroll_y=False
+        scroll.add_widget(grid)
+        return scroll
 
 if __name__ == "__main__":
     test =Test()
