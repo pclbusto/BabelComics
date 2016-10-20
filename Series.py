@@ -103,7 +103,7 @@ Values(?,?,?,?,?,?,?)''', (
         if not orden: orden = ''
         if filtro:
             c.execute(
-                '''SELECT id,nombre,descripcion,image_url,publisherId,AnioInicio,cantidadNumeros, date_added,name From series inner join (select id as pbis,name from publishers )as publishers on series.publisherId = publishers.pbis where ''' + filtro + ' ' + orden,
+                '''SELECT id,nombre,descripcion,image_url,publisherId,AnioInicio,cantidadNumeros, date_added,name From series left join (select id as pbis,name from publishers )as publishers on series.publisherId = publishers.pbis where ''' + filtro + ' ' + orden,
                 valores)
         else:
             c.execute(
@@ -152,7 +152,7 @@ if __name__ == "__main__":
     series = Series()
     #series.getList('', None, 'order by nombre desc')
     #series.rmAll()
-    for i in range(1,2):
+    for i in range(1,50):
         series.loadDataFromComicVine()
 
 
