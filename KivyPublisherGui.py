@@ -56,9 +56,6 @@ class Test(App):
         for i in range(4, 8):
             box.add_widget(PublisherPanel(listaImagenes[i]))
         carousel.add_widget(box)
-        scroll = ScrollView(size_hint=(None,1), size=(Window.width, Window.height))
-        #scroll.do_scroll_y=False
-        scroll.add_widget(grid)
         return carousel
 
 if __name__ == "__main__":
