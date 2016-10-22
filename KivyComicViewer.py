@@ -50,9 +50,16 @@ class KivyVisor(App):
         flow.bind(on_touch_down=self.on_touch_down)
         self.comic = KivyComicBook("E:\\Comics\\DC\\Green Lantern\\144 Blackest Night\\Blackest Night_ Tales of the Corps V2009 #1 (of 3) (2009).cbz")
         self.comic.openCbFile()
-        self.scatter = Scatter()
+        self.scatter = Scatter(scale_min=.5)
         self.imagenPagina = self.comic.getImagePage()
         self.scatter.add_widget(self.imagenPagina)
+        print(Window.center)
+        #centrar la imagen
+        self.scatter.pos=(Window.center[0]-(self.imagenPagina.width/2),Window.center[1]-(self.imagenPagina.height/2))
+        #ajustar tamañio a altura
+        #alturaactual    1
+        #altura venta    x
+        self.scatter.scale=Window.height/self.imagenPagina.height
         flow.add_widget(self.scatter)
         return flow
 
