@@ -1,6 +1,6 @@
 import os
 import io
-from kivy.core.image import Image as CoreImage
+from kivy.uix.image import Image as KivyImage
 import zipfile
 import rarfile
 
@@ -50,15 +50,16 @@ class KivyComicBook():
             self.paginas = [x for x in self.cbFile.namelist() if (x[-3:].lower() in self.extensionesSoportadas)]
         elif (self.getTipo().lower()=='cbr'):
             self.cbFile = rarfile.RarFile(self.path, 'r')
-            print("aca")
             self.paginas = [x.filename for x in self.cbFile.infolist() if (x.filename[-3:].lower() in self.extensionesSoportadas)]
         #print(len(self.paginas))
         self.paginas.sort()
         self.indicePaginaActual = 0
     def getImagePage(self):
-        data = io.BytesIO(self.getPage()).read()
-        im = CoreImage(data, ext=self.getTipo())
-        return (im)
+        print(self.paginas[self.indicePaginaActual])
+        self.cbFile.extract(self.paginas[self.indicePaginaActual])
+
+        # return (Image.open(self.getPage()))
+        return KivyImage(source = self.paginas[self.indicePaginaActual])
     def getCantidadPaginas(self):
         return (len(self.paginas))
     def getPage(self):
@@ -66,9 +67,15 @@ class KivyComicBook():
     def getPageExtension(self):
         #print('En Comicbook getPageExtension:'+str(len(self.paginas)))
         return (self.paginas[self.indicePaginaActual][-4:])
+    def gotoNextPage(self):
+        self.goto(self.indicePaginaActual+1)
+    def gotoPrevPage(self):
+        self.goto(self.indicePaginaActual-1)
     def goto(self,index):
-        if index < len(self.paginas):
+
+        if index < len(self.paginas) and index>=0:
             self.indicePaginaActual = index
+        print(self.indicePaginaActual)
     def getTitulo(self):
         return(self.titulo)
     def getPath(self):
