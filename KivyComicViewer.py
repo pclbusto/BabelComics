@@ -57,8 +57,7 @@ class KivyVisor(App):
         #centrar la imagen
         self.scatter.pos=(Window.center[0]-(self.imagenPagina.width/2),Window.center[1]-(self.imagenPagina.height/2))
         #ajustar tamañio a altura
-        #alturaactual    1
-        #altura venta    x
+        #alturaactual/#altura venta (regla de tres simple)
         self.scatter.scale=Window.height/self.imagenPagina.height
         flow.add_widget(self.scatter)
         return flow
