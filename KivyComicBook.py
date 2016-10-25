@@ -75,7 +75,7 @@ class KivyComicBook():
 
         if index < len(self.paginas) and index>=0:
             self.indicePaginaActual = index
-        print(self.indicePaginaActual)
+        #print(self.indicePaginaActual)
     def getTitulo(self):
         return(self.titulo)
     def getPath(self):
