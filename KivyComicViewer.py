@@ -62,7 +62,7 @@ class KivyVisor(App):
             print("POP UP")
     def salir(self,obj,event):
         #self.stop()
-        print("POP UP")
+        print("POP UPd")
     def centrado(self,obj,event):
         print( Window.center)
         print(Window.center[0] - (self.imagenPagina.width / 2), Window.center[1] - (self.imagenPagina.height / 2))
