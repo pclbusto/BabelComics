@@ -32,6 +32,7 @@ class KivyVisor(App):
         zona0 = ((Window.width*0.5-Window.width*0.1,Window.width*0.5+Window.width*0.1),(Window.height - Window.height * 0.1,Window.height))
         zona3 = ((0, Window.width * 0.1), (Window.height * 0.1 + Window.height * 0.5,Window.height * -0.1 + Window.height * 0.5 ))
         zona4 = ((Window.width - Window.width * 0.1, Window.width), (Window.height * 0.1 + Window.height * 0.5 , Window.height * -0.1 + Window.height * 0.5))
+
         if (zona3[0][0]< event.pos[0] and event.pos[0] < zona3[0][1]) and (event.pos[1]<zona3[1][0] and event.pos[1]>zona3[1][1]):
             self.comic.gotoPrevPage()
             self.scatter.remove_widget(self.imagenPagina)
@@ -42,12 +43,18 @@ class KivyVisor(App):
             self.comic.gotoNextPage()
             self.imagenPagina = self.comic.getImagePage()
             self.scatter.add_widget(self.imagenPagina)
-        if (zona0[0][0]< event.pos[0] and event.pos[0] < zona0[0][1]) and (event.pos[1]<zona0[1][0] and event.pos[1]>zona0[1][1]):
+        print(zona0)
+        print(zona0[0][0]< event.pos[0])
+        print(event.pos[0] < zona0[0][1])
+        print(event.pos[1]<zona0[1][0])
+        print(event.pos[1]>zona0[1][1])
+        print(event.pos)
+        if (zona0[0][0]< event.pos[0] and event.pos[0] < zona0[0][1]) and (zona0[1][0]<event.pos[1] and event.pos[1]<zona0[1][1]):
             print("POP UP")
     def build(self):
         flow = FloatLayout()
         flow.bind(on_touch_down=self.on_touch_down)
-        self.comic = KivyComicBook("E:\\Comics\\DC\\Green Lantern\\144 Blackest Night\\Blackest Night_ Tales of the Corps V2009 #1 (of 3) (2009).cbz")
+        self.comic = KivyComicBook("C:\\Users\\bustoped\\Pictures\\comics\\Cyborg 003 (2016) (2 covers) (digital) (Minutemen-Slayer).cbr")
         self.comic.openCbFile()
         self.scatter = Scatter(scale_min=.5)
         self.imagenPagina = self.comic.getImagePage()
