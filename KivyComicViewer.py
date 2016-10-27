@@ -1,7 +1,10 @@
 from kivy.app import App
+from kivy.uix.button import Label
+from kivy.uix.image import Image
 from kivy.uix.scatter import Scatter
 from kivy.uix.floatlayout import FloatLayout
-from kivy.uix.image import AsyncImage
+from kivy.uix.gridlayout import GridLayout
+from kivy.uix.popup import Popup
 from KivyComicBook import *
 from kivy.core.window import Window
 
@@ -43,18 +46,34 @@ class KivyVisor(App):
             self.comic.gotoNextPage()
             self.imagenPagina = self.comic.getImagePage()
             self.scatter.add_widget(self.imagenPagina)
-        print(zona0)
-        print(zona0[0][0]< event.pos[0])
-        print(event.pos[0] < zona0[0][1])
-        print(event.pos[1]<zona0[1][0])
-        print(event.pos[1]>zona0[1][1])
-        print(event.pos)
         if (zona0[0][0]< event.pos[0] and event.pos[0] < zona0[0][1]) and (zona0[1][0]<event.pos[1] and event.pos[1]<zona0[1][1]):
+            box = GridLayout(cols=5)
+            box.add_widget(Image(source="da.png"))
+            botonCentrado = Image(source="4f.png")
+            botonCentrado.bind(on_touch_down=self.centrado)
+            box.add_widget(botonCentrado)
+            botonSalir = Label(text="salir")
+            botonSalir.bind(on_touch_down=self.salir)
+            box.add_widget(botonSalir)
+            p = Popup(title='Test popup',  size_hint=(None, None), size=(400, 400))
+            p.add_widget(box)
+
+            p.open()
             print("POP UP")
+    def salir(self,obj,event):
+        #self.stop()
+        print("POP UPd")
+    def centrado(self,obj,event):
+        print( Window.center)
+        print(Window.center[0] - (self.imagenPagina.width / 2), Window.center[1] - (self.imagenPagina.height / 2))
+        self.scatter.scale = Window.height / self.imagenPagina.height
+        self.scatter.pos = (
+        Window.center[0] - (self.imagenPagina.width ), 0)
+
     def build(self):
         flow = FloatLayout()
         flow.bind(on_touch_down=self.on_touch_down)
-        self.comic = KivyComicBook("C:\\Users\\bustoped\\Pictures\\comics\\Cyborg 003 (2016) (2 covers) (digital) (Minutemen-Slayer).cbr")
+        self.comic = KivyComicBook("E:\\Comics\\DC\\Green Lantern\\144 Blackest Night\\Blackest Night_ Tales of the Corps V2009 #1 (of 3) (2009).cbz")
         self.comic.openCbFile()
         self.scatter = Scatter(scale_min=.5)
         self.imagenPagina = self.comic.getImagePage()
