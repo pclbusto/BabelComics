@@ -1,8 +1,10 @@
 import os
 import io
-from kivy.uix.image import Image as KivyImage
+from kivy.uix.image import Image
 import zipfile
 import rarfile
+from io import BytesIO
+from kivy.core.image import Image as CoreImage
 
 class KivyComicBook():
     def __init__(self, path, titulo='', serie=-1, numero=-1):
@@ -55,11 +57,12 @@ class KivyComicBook():
         self.paginas.sort()
         self.indicePaginaActual = 0
     def getImagePage(self):
+
         print(self.paginas[self.indicePaginaActual])
         self.cbFile.extract(self.paginas[self.indicePaginaActual])
 
         # return (Image.open(self.getPage()))
-        return KivyImage(source = self.paginas[self.indicePaginaActual])
+        return Image(source = self.paginas[self.indicePaginaActual])
     def getCantidadPaginas(self):
         return (len(self.paginas))
     def getPage(self):
