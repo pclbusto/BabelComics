@@ -73,7 +73,7 @@ class KivyVisor(App):
     def build(self):
         flow = FloatLayout()
         flow.bind(on_touch_down=self.on_touch_down)
-        self.comic = KivyComicBook("E:\\Comics\\DC\\Green Lantern\\144 Blackest Night\\Blackest Night_ Tales of the Corps V2009 #1 (of 3) (2009).cbz")
+        self.comic = KivyComicBook("E:\\Comics\\DC\\DC NEW 52 WEEK 138\\RED LANTERNS # 030.cbr")
         self.comic.openCbFile()
         self.scatter = Scatter(scale_min=.5)
         self.imagenPagina = self.comic.getImagePage()
