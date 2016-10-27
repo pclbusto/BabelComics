@@ -59,7 +59,7 @@ class KivyComicBook():
         self.indicePaginaActual = 0
     def getImagePage(self):
 
-        return MemoryImage(self.cbFile.open(self.paginas[self.indicePaginaActual]))
+        return MemoryImage(self.cbFile.open(self.paginas[self.indicePaginaActual]), self.getPageExtension())
         # print(self.paginas[self.indicePaginaActual])
         # self.cbFile.extract(self.paginas[self.indicePaginaActual])
         #
@@ -71,13 +71,12 @@ class KivyComicBook():
         return(self.cbFile.open(self.paginas[self.indicePaginaActual]))
     def getPageExtension(self):
         #print('En Comicbook getPageExtension:'+str(len(self.paginas)))
-        return (self.paginas[self.indicePaginaActual][-4:])
+        return (self.paginas[self.indicePaginaActual][-3:])
     def gotoNextPage(self):
         self.goto(self.indicePaginaActual+1)
     def gotoPrevPage(self):
         self.goto(self.indicePaginaActual-1)
     def goto(self,index):
-
         if index < len(self.paginas) and index>=0:
             self.indicePaginaActual = index
         #print(self.indicePaginaActual)

@@ -57,7 +57,7 @@ class PanelThumbnailComics(Canvas):
                 # print('coversThumbnails'+os.path.sep+str(comic.rowId)+comic.getPageExtension())
                 # print('antes de llamar a openCbFile')
 
-                nombreThumnail = 'coversThumbnails' + os.path.sep + str(comic.rowId) + comic.getPageExtension()
+                nombreThumnail = 'coversThumbnails' + os.path.sep + str(comic.rowId) +"."+ comic.getPageExtension()
                 cover = None
                 if (not os.path.isfile(nombreThumnail)):
                     cover = comic.getImagePage().resize(self.size, Image.BICUBIC)
@@ -143,7 +143,7 @@ class PanelThumbnailComics(Canvas):
     def recreateThumbnails(self):
         if self.comicActual:
             comic = self.tagAndComic[self.comicActual][1]
-            nombreThumnail = 'coversThumbnails' + os.path.sep + str(comic.rowId) + comic.getPageExtension()
+            nombreThumnail = 'coversThumbnails' + os.path.sep + str(comic.rowId) +"."+ comic.getPageExtension()
             if (os.path.isfile(nombreThumnail)):
                 os.remove(nombreThumnail)
                 pagina = comic.getImagePage().resize(self.size, Image.BICUBIC)
@@ -154,7 +154,7 @@ class PanelThumbnailComics(Canvas):
             X = int(self.tagAndComic[self.comicActual][2])
             Y = int(self.tagAndComic[self.comicActual][3])
             self.__insertThumnail(X, Y, self.thumbnail[len(self.thumbnail) - 1], comic)
-            print('hay que borrar: ' + 'coversThumbnails' + os.path.sep + str(comic.rowId) + comic.getPageExtension())
+            print('hay que borrar: ' + 'coversThumbnails' + os.path.sep + str(comic.rowId) +"."+ comic.getPageExtension())
 
 
 def scrollupMouse(event):

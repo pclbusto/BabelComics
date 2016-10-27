@@ -14,12 +14,14 @@ class MemoryImage(Image):
     """Display an image already loaded in memory."""
     memory_data = ObjectProperty(None)
 
-    def __init__(self,memoryFile, **kwargs):
+    def __init__(self,memoryFile, ext, **kwargs):
         super(MemoryImage, self).__init__(**kwargs)
         data = BytesIO(memoryFile.read())
-        im = CoreImage(data,ext="jpg")
+        im = CoreImage(data,ext=ext)
+        print(ext)
         with self.canvas:
             self.texture = im.texture
+
 
 
 

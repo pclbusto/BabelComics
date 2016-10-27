@@ -48,32 +48,37 @@ class KivyVisor(App):
             self.scatter.add_widget(self.imagenPagina)
         if (zona0[0][0]< event.pos[0] and event.pos[0] < zona0[0][1]) and (zona0[1][0]<event.pos[1] and event.pos[1]<zona0[1][1]):
             box = GridLayout(cols=5)
-            box.add_widget(Image(source="da.png"))
-            botonCentrado = Image(source="4f.png")
-            botonCentrado.bind(on_touch_down=self.centrado)
+            box.add_widget(Button(text="Ancho"))
+            botonCentrado = Button(text="Centrar")
+            botonCentrado.bind(on_press=self.centrado)
             box.add_widget(botonCentrado)
-            botonSalir = Label(text="salir")
-            botonSalir.bind(on_touch_down=self.salir)
+            botonSalir = Button(text="salir")
+            botonSalir.bind(on_press=self.salir)
             box.add_widget(botonSalir)
-            p = Popup(title='Test popup',  size_hint=(None, None), size=(400, 400))
+            botonSalir = Button(text="Rotar")
+            botonSalir.bind(on_press=self.rotar)
+            box.add_widget(botonSalir)
+
+            p = Popup(title='Test popup',  size_hint=(None, None), size=(400, 150))
             p.add_widget(box)
 
             p.open()
             print("POP UP")
-    def salir(self,obj,event):
-        #self.stop()
-        print("POP UPd")
-    def centrado(self,obj,event):
-        print( Window.center)
-        print(Window.center[0] - (self.imagenPagina.width / 2), Window.center[1] - (self.imagenPagina.height / 2))
+    def rotar(self,event):
+        print("rotar")
+    def salir(self,event):
+        print("salir")
+    def centrado(self,event):
+        # print( Window.center)
+        # print(Window.center[0] - (self.imagenPagina.width / 2), Window.center[1] - (self.imagenPagina.height / 2))
         self.scatter.scale = Window.height / self.imagenPagina.height
         self.scatter.pos = (
         Window.center[0] - (self.imagenPagina.width ), 0)
-
+        print("centrado")
     def build(self):
         flow = FloatLayout()
         flow.bind(on_touch_down=self.on_touch_down)
-        self.comic = KivyComicBook("E:\\Comics\\DC\\DC NEW 52 WEEK 138\\RED LANTERNS # 030.cbr")
+        self.comic = KivyComicBook("C:\\Users\\bustoped\\Pictures\\comics\\DC Week+ (04-22-2015)\\Convergence - The Flash 001 (2015).cbz")
         self.comic.openCbFile()
         self.scatter = Scatter(scale_min=.5)
         self.imagenPagina = self.comic.getImagePage()
