@@ -98,7 +98,7 @@ class KivyComicBook():
 ##        return ('<NOMBRE: '+self.nombre+' PATH :'+self.path)
 if __name__ == "__main__":
     #clave1 = '/root/Imagenes/Comics/superman1.cbz'
-    comic1=KivyComicBook("C:\\Users\\pclbu\Pictures\Red Hood and the Outlaws 003 (2016) (2 covers) (Digital) (Zone-Empire).cbr",'Superman inicio',1,1)
+    comic1=KivyComicBook("C:\\Users\\pclbu\\Pictures\\Hal Jordan & the Green Lantern Corps 006 (2016) (2 covers) (digital) (Minutemen-Slayer).cbr",'Superman inicio',1,1)
 ##    comic2=ComicBook('/root/Imagenes/Comics/Green Lantern1.cbz','Origenes',1,1)
 ##    comic3=ComicBook('/root/Imagenes/Comics/Flash1.cbz','Rebirth',1,1)
 ##    comic1 = db[clave1]

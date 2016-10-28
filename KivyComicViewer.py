@@ -3,6 +3,7 @@ from kivy.uix.scatter import Scatter
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.popup import Popup
+from kivy.uix.button import Button
 from KivyComicBook import *
 from kivy.core.window import Window
 
@@ -65,24 +66,28 @@ class KivyVisor(App):
     def rotar(self,event):
         print("rotar")
     def salir(self,event):
-        print("salir")
+        self.stop()
     def centrado(self,event):
         # print( Window.center)
         # print(Window.center[0] - (self.imagenPagina.width / 2), Window.center[1] - (self.imagenPagina.height / 2))
         self.scatter.scale = Window.height / self.imagenPagina.height
-        self.scatter.pos = (
-        Window.center[0] - (self.imagenPagina.width ), 0)
+        self.scatter.pos=(0,0)
+        #Window.center[0] - (self.imagenPagina.width ), 0)
         print("centrado")
+        self.scatter.center = Window.center
     def build(self):
         flow = FloatLayout()
         flow.bind(on_touch_down=self.on_touch_down)
-        self.comic = KivyComicBook("C:\\Users\\bustoped\\Pictures\\comics\\DC Week+ (04-22-2015)\\Convergence - The Flash 001 (2015).cbz")
+        self.comic = KivyComicBook("C:\\Users\\pclbu\\Pictures\\Detective Comics 942(2016)(2 covers)(Digital)(TLK-EMPIRE-HD).cbr")
         self.comic.openCbFile()
-        self.scatter = Scatter(scale_min=.5)
+        self.scatter = Scatter()#scale_min=.5)
+
         self.imagenPagina = self.comic.getImagePage()
+        self.scatter.size =self.imagenPagina.size
+        self.scatter.size_hint = (None,None)
         self.scatter.add_widget(self.imagenPagina)
         self.scatter.do_rotation=False
-        print(Window.center)
+
         #centrar la imagen
         self.scatter.pos=(Window.center[0]-(self.imagenPagina.width/2),Window.center[1]-(self.imagenPagina.height/2))
         #ajustar tamañio a altura
