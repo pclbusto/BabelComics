@@ -1,10 +1,6 @@
 import os
-import io
-from kivy.uix.image import Image
 import zipfile
 import rarfile
-from io import BytesIO
-from kivy.core.image import Image as CoreImage
 from MemoryImage import *
 
 class KivyComicBook():

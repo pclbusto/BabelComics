@@ -1,9 +1,3 @@
-from kivy.uix.screenmanager import ScreenManager, Screen
-from kivy.app import App
-from kivy.uix.floatlayout import FloatLayout
-from kivy.uix.button import Label, Button
-from kivy.uix.popup import Popup
-from kivy.uix.gridlayout import GridLayout
 from kivy.core.image import Image as CoreImage
 from kivy.uix.image import Image
 from kivy.properties import ObjectProperty
