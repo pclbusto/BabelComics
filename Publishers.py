@@ -21,6 +21,7 @@ class Publishers():
         self.conexion = sqlite3.connect('BabelComic.db')
         self.conexion.row_factory = sqlite3.Row
         self.status = 1
+        self.listaComicVineSearch = []
     def add(self,publisher):
         c=self.conexion.cursor()
         c.execute('''INSERT INTO publishers (id, name, deck, description, logoImagePath)
@@ -115,8 +116,10 @@ name=?,description=?,deck=?,logoImagePath=? where id=?''', (publisher.name,publi
         comic_searcher.setEntidad('publishers')
         comic_searcher.addFilter("name:"+filtro.replace(" ","%20"))
         comic_searcher.vineSearch(0)
-        for publisher in comic_searcher.listaBusquedaVine:
-            print(publisher.name)
+        self.listaComicVineSearch = comic_searcher.listaBusquedaVine
+
+        #for publisher in comic_searcher.listaBusquedaVine:
+        #    print(publisher.name)
             #self.add(serie)
         #print('porcentaje completado: ' + str((100 * (len(lista_series) / comic_searcher.cantidadResultados))))
 
