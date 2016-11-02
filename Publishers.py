@@ -130,6 +130,7 @@ if __name__ == "__main__":
 ##67600 dio error
 ##67700 dio error
     publishers = Publishers()
+    p = Publisher(12134,"pedro")
     publishers.searchInComicVineComicVine("Marvel")
 
 ##    publishers.rmAll()
@@ -142,3 +143,4 @@ if __name__ == "__main__":
     for publisher in publishers.getList(("0",),'id = ?'):
         print(publisher.name,publisher.id)
     publishers.close()
+    print(p)

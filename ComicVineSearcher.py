@@ -1,4 +1,4 @@
-from Publishers import *
+from Publishers import Publisher
 from ComicBook import ComicBook
 from ArcoArgumental import *
 from Serie import Serie
@@ -223,7 +223,9 @@ class ComicVineSearcher():
                     #                                'publisher': publisher,
                     #                                'start_year': start_year})
             elif self.entidad == 'publishers':
+                print(results)
                 for item in results:
+                    #print(item.text)
                     publisher = Publisher(item.find('id').text, item.find('name').text)
                     publisher.descripcion = item.find('description').text
                     publisher.deck = item.find('deck').text
