@@ -14,7 +14,7 @@ class KivyVisor(FloatLayout):
     def __init__(self,**kwargs):
         super(KivyVisor, self).__init__(**kwargs)
         #self.flow  = FloatLayout()
-        self.bind(on_touch_down=self.on_touch_down)
+        #self.bind(on_touch_down=self.on_touch_down)
         self.comic = KivyComicBook("E:\\Comics\\DC\\DC Week+ (03-11-2015)\\Green Lantern Corps V2011 #40 (2015).cbz")
         self.comic.openCbFile()
         self.scatter = Scatter()#scale_min=.5)
@@ -37,7 +37,7 @@ class KivyVisor(FloatLayout):
         #self.add_widget(self.flow)
         #return flow
 
-    def on_touch_down(self,event, obj):
+    def on_touch_down(self,event):
         '''
         vamos a capturar eventos en estas zonas
         *************************
