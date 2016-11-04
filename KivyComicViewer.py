@@ -9,20 +9,18 @@ from kivy.core.window import Window
 from kivy.uix.screenmanager import Screen,ScreenManager
 
 
-class KivyVisor(FloatLayout):
+class KivyVisor(Screen):
 
     def __init__(self,**kwargs):
         super(KivyVisor, self).__init__(**kwargs)
-        #self.flow  = FloatLayout()
-        #self.bind(on_touch_down=self.on_touch_down)
+        self.scatter = Scatter()
+        self.bind(on_touch_down=self.on_touch)
         self.comic = KivyComicBook("E:\\Comics\\DC\\DC Week+ (03-11-2015)\\Green Lantern Corps V2011 #40 (2015).cbz")
         self.comic.openCbFile()
-        self.scatter = Scatter()#scale_min=.5)
-
         self.imagenPagina = self.comic.getImagePage()
         self.scatter.center = Window.center
         #self.scatter.size =self.imagenPagina.size
-        #self.scatter.size_hint = (None,None)
+        self.scatter.size_hint = (None,None)
         self.scatter.add_widget(self.imagenPagina)
         self.scatter.do_rotation=False
         self.add_widget(self.scatter)
@@ -31,13 +29,9 @@ class KivyVisor(FloatLayout):
         #ajustar tamañio a altura
         #alturaactual/#altura venta (regla de tres simple)
         self.scatter.scale=Window.height/self.imagenPagina.height
-        self.scatter.size = self.imagenPagina.size
-        self.scatter.size_hint_x = None
-        self.scatter.size_hint_y = None
-        #self.add_widget(self.flow)
-        #return flow
+        self.bbox = ((0,0),(100,100))
 
-    def on_touch_down(self,event):
+    def on_touch(self, obj, event):
         '''
         vamos a capturar eventos en estas zonas
         *************************
@@ -110,8 +104,9 @@ class KivyVisor(FloatLayout):
 
 class Test(App):
     def build(self):
-        sm =ScreenManager()
-        #sm.add_widget(KivyVisor( size_hint=(0.5,0.5)))
+        # sm =ScreenManager()
+        #
+        # sm.add_widget(KivyVisor())
         #return sm
         return KivyVisor()
 if __name__ == "__main__":

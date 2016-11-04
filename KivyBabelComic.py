@@ -42,7 +42,7 @@ class KivyBabelComic(App):
         #zona1 = ((0, Window.width * 0.1), (Window.height * 0.1 + Window.height * 0.5,Window.height * -0.1 + Window.height * 0.5 ))
 
         zona2 = ((Window.width * 0.5 - Window.width * 0.1, Window.width * 0.5 + Window.width * 0.1),
-                 (0, Window.height + Window.height * 0.1))
+                 (0, Window.height * 0.1))
         #zona3 = ((Window.width - Window.width * 0.1, Window.width), (Window.height * 0.1 + Window.height * 0.5 , Window.height * -0.1 + Window.height * 0.5))
 
 
