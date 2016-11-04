@@ -1,4 +1,4 @@
-from Publishers import Publisher
+import PublishersModule
 from ComicBook import ComicBook
 from ArcoArgumental import *
 from Serie import Serie
@@ -226,7 +226,7 @@ class ComicVineSearcher():
                 print(results)
                 for item in results:
                     #print(item.text)
-                    publisher = Publisher(item.find('id').text, item.find('name').text)
+                    publisher = PublishersModule.Publisher(item.find('id').text, item.find('name').text)
                     publisher.descripcion = item.find('description').text
                     publisher.deck = item.find('deck').text
                     if item.find('image').find('super_url') != None:

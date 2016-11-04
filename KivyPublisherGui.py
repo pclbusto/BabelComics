@@ -11,20 +11,23 @@ from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.button import Label
 from kivy.uix.scrollview import ScrollView
 from kivy.core.window import Window
-from Publishers import *
+from PublishersModule import *
 
 from kivy.uix.image import Image, AsyncImage
 
 
 from kivy.uix.carousel import Carousel
 
-class KivyPublisherGui(Screen):
+class KivyPublisherGui(GridLayout):
     def __init__(self,publisher, **kwargs):
-        self.layout = GridLayout()
+        super(KivyPublisherGui,self).__init__(**kwargs)
         self.publisher = publisher
-        self.logo = AsyncImage(publisher.logoImagePath)
+        self.logo = Image(source=publisher.logoImagePath)
         self.label = Label(text=publisher.name)
-        self.layout.add_widget(self.label)
+        self.cols=1
+        self.add_widget(self.logo)
+        self.add_widget(self.label)
+
 
 class KivyAllPublishersGui(Carousel):
     def __init__(self, publishers, **kwargs):
@@ -34,21 +37,34 @@ class KivyAllPublishersGui(Carousel):
         self.size_hint=(1,1)
         self.listaPublishers = publishers
         for publisher in self.listaPublishers:
-            self.add_widget(publisher)
+            self.add_widget(KivyPublisherGui(publisher))
+        #self.add_widget(KivyPublisherGui(publishers[0]))
 class Test(App):
     def build(self):
         publishers = Publishers()
-        publishers.searchInComicVineComicVine("Marvel")
-        for publisher in publishers.listaComicVineSearch:
-            print(publisher.name, publisher.id)
-        publishers.close()
-
-        carousel = KivyAllPublishersGui(direction='right')
+        # publishers.searchInComicVineComicVine("Marvel")
+        # for publisher in publishers.listaComicVineSearch:
+        #     print(publisher.name, publisher.id)
+        # publishers.close()
+        dc = Publisher(1,"dc")
+        dc.logoImagePath="dcComics.jpg"
+        publishers.listaComicVineSearch.append(dc)
+        # marvel = Publisher(1, "marvel")
+        # marvel.logoImagePath = "marvel.gif"
+        # publishers.listaComicVineSearch.append(marvel)
+        # darkhorse = Publisher(1, "Dark Horse")
+        # darkhorse.logoImagePath = "darkhorse.gif"
+        # publishers.listaComicVineSearch.append(darkhorse)
+        idw = Publisher(1, "idw")
+        idw.logoImagePath = "idw.jpg"
+        publishers.listaComicVineSearch.append(idw)
+        image = Publisher(1, "Image")
+        image.logoImagePath = "image.jpg"
+        publishers.listaComicVineSearch.append(image)
+        carousel = KivyAllPublishersGui(publishers.listaComicVineSearch,direction='right')
         return carousel
 
 if __name__ == "__main__":
-
-
     test =Test()
     test.run()
     #Test().run()
