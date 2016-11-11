@@ -6,7 +6,7 @@ from ComicVineSearcher import *
 
 
 
-class Publisher():
+class Publisher:
     def __init__(self,id,name):
         self.id = id
         self.name = name
@@ -15,8 +15,7 @@ class Publisher():
         self.logoImagePath=""
 
 
-
-class Publishers():
+class Publishers:
     def __init__(self):
         self.conexion = sqlite3.connect('BabelComic.db')
         self.conexion.row_factory = sqlite3.Row
@@ -109,7 +108,7 @@ name=?,description=?,deck=?,logoImagePath=? where id=?''', (publisher.name,publi
     def close(self):
         self.conexion.close()
 
-    def searchInComicVineComicVine(self, filtro):
+    def searchInComicVine(self, filtro):
         config = BabelComicBookManagerConfig()
         clave = config.getClave('publishers')
         comic_searcher = ComicVineSearcher(clave)
@@ -130,7 +129,7 @@ if __name__ == "__main__":
 ##67600 dio error
 ##67700 dio error
     publishers = Publishers()
-    p = Publisher(12134,"pedro")
+    # p = Publisher(12134,"pedro")
     publishers.searchInComicVineComicVine("Marvel")
 
 ##    publishers.rmAll()
@@ -140,7 +139,7 @@ if __name__ == "__main__":
 ##    publishers.add(publisher)
 ##    series.rm('-1')
 ##    series.add(serie)
-    for publisher in publishers.getList(("0",),'id = ?'):
+    for publisher in publishers.listaComicVineSearch:
         print(publisher.name,publisher.id)
     publishers.close()
-    print(p)
+    # print(p)

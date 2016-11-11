@@ -1,30 +1,21 @@
 from kivy.app import App
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.screenmanager import *
-from kivy.uix.scrollview import ScrollView
-from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.button import Button
-from kivy.uix.scatterlayout import ScatterLayout
-from kivy.uix.scatter import ScatterPlane
-from kivy.uix.image import Image
-from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.button import Label
-from kivy.uix.scrollview import ScrollView
-from kivy.core.window import Window
 from Publishers import *
-
-from kivy.uix.image import Image, AsyncImage
-
-
 from kivy.uix.carousel import Carousel
+from kivy.uix.image import AsyncImage
+import Stuff
 
-class KivyPublisherGui(Screen):
+class KivyPublisherGui(GridLayout):
     def __init__(self,publisher, **kwargs):
-        self.layout = GridLayout()
+        super(KivyPublisherGui,self).__init__(**kwargs)
         self.publisher = publisher
-        self.logo = AsyncImage(publisher.logoImagePath)
+        jpg = Stuff.convertAndDownload(publisher.logoImagePath)
+        # self.logo = AsyncImage(source=jpg)
         self.label = Label(text=publisher.name)
-        self.layout.add_widget(self.label)
+        self.cols=1
+        self.add_widget(self.label)
 
 class KivyAllPublishersGui(Carousel):
     def __init__(self, publishers, **kwargs):
@@ -34,21 +25,13 @@ class KivyAllPublishersGui(Carousel):
         self.size_hint=(1,1)
         self.listaPublishers = publishers
         for publisher in self.listaPublishers:
-            self.add_widget(publisher)
+            self.add_widget(KivyPublisherGui(publisher))
 class Test(App):
     def build(self):
         publishers = Publishers()
-        publishers.searchInComicVineComicVine("Marvel")
-        for publisher in publishers.listaComicVineSearch:
-            print(publisher.name, publisher.id)
-        publishers.close()
-
-        carousel = KivyAllPublishersGui(direction='right')
+        publishers.searchInComicVine("Marvel")
+        carousel = KivyAllPublishersGui(publishers.listaComicVineSearch,direction='right')
         return carousel
 
 if __name__ == "__main__":
-
-
-    test =Test()
-    test.run()
-    #Test().run()
+    Test().run()
