@@ -13,7 +13,7 @@ def convertAndDownload(url,path):
     print("info Foto")
     print(meta)
 
-    # file_size = int(meta.get("Content-Length"))
+    #     file_size = int(meta.get("Content-Length"))
     # print("Downloading:{0} Bytes: {1}".format(file_name, file_size))
     # file_size_dl = 0
     block_sz = 8192
