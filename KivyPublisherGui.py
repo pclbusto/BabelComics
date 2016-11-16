@@ -12,7 +12,7 @@ class KivyPublisherGui(GridLayout):
         super(KivyPublisherGui,self).__init__(**kwargs)
         self.publisher = publisher
         jpg = Stuff.convertAndDownload(publisher.logoImagePath)
-        # self.logo = AsyncImage(source=jpg)
+        #    self.logo = AsyncImage(source=jpg)
         self.label = Label(text=publisher.name)
         self.cols=1
         self.add_widget(self.label)
