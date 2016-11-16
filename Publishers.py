@@ -129,7 +129,7 @@ name=?,description=?,deck=?,logoImagePath=? where id=?''', (publisher.name,publi
 if __name__ == "__main__":
 
 
-##67600 dio error
+##67600 dio      error
 ##67700 dio error
     publishers = Publishers()
     # p = Publisher(12134,"pedro")
