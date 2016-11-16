@@ -4,11 +4,11 @@ from PIL import Image
 from PIL import ImageFile
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 
-def convertAndDownload(url):
+def convertAndDownload(url,path):
     # url = "http://static4.comicvine.com/uploads/original/1/19151/412843-dkhlogo.gif"
     file_name = url.split('/')[-1]
     u = urllib.request.urlopen(url)
-    f = open(file_name, 'wb')
+    f = open(path+file_name, 'wb')
     meta = u.info()
     print("info Foto")
     print(meta)
@@ -16,10 +16,10 @@ def convertAndDownload(url):
     # file_size = int(meta.get("Content-Length"))
     # print("Downloading:{0} Bytes: {1}".format(file_name, file_size))
     # file_size_dl = 0
-    # block_sz = 8192
+    block_sz = 8192
     while True:
         # print("leyendo")
-        # buffer = u.read(block_sz)
+        buffer = u.read(block_sz)
         buffer = u.read()
         if not buffer:
             break

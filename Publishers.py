@@ -3,8 +3,8 @@ from BabelComicBookManagerConfig import *
 import xml.etree.ElementTree as ET
 import sqlite3
 from ComicVineSearcher import *
-
-
+import os
+import Stuff
 
 class Publisher:
     def __init__(self,id,name):
@@ -109,6 +109,7 @@ name=?,description=?,deck=?,logoImagePath=? where id=?''', (publisher.name,publi
         self.conexion.close()
 
     def searchInComicVine(self, filtro):
+        path = "publishers\\temp\\"
         config = BabelComicBookManagerConfig()
         clave = config.getClave('publishers')
         comic_searcher = ComicVineSearcher(clave)
@@ -116,9 +117,11 @@ name=?,description=?,deck=?,logoImagePath=? where id=?''', (publisher.name,publi
         comic_searcher.addFilter("name:"+filtro.replace(" ","%20"))
         comic_searcher.vineSearch(0)
         self.listaComicVineSearch = comic_searcher.listaBusquedaVine
+        if not os.path.exists(path):
+            os.makedirs(path)
 
-        #for publisher in comic_searcher.listaBusquedaVine:
-        #    print(publisher.name)
+        for publisher in comic_searcher.listaBusquedaVine:
+                Stuff.convertAndDownload(publisher.logoImagePath,path)
             #self.add(serie)
         #print('porcentaje completado: ' + str((100 * (len(lista_series) / comic_searcher.cantidadResultados))))
 
@@ -130,7 +133,7 @@ if __name__ == "__main__":
 ##67700 dio error
     publishers = Publishers()
     # p = Publisher(12134,"pedro")
-    publishers.searchInComicVineComicVine("Marvel")
+    publishers.searchInComicVine("Marvel")
 
 ##    publishers.rmAll()
 ##    series.loadFromFiles()
