@@ -1,10 +1,11 @@
-import Publishers
+import PublishersModule
 from ComicBook import ComicBook
 from ArcoArgumental import *
 from Serie import Serie
 import datetime
 import urllib.request
 import xml.etree.ElementTree as ET
+from PublishersModule import *
 
 
 
@@ -223,11 +224,11 @@ class ComicVineSearcher():
                     #                                'publisher': publisher,
                     #                                'start_year': start_year})
             elif self.entidad == 'publishers':
-                print("publisher")
+                # print("publisher")
                 print(results)
                 for item in results:
-                    print(item)
-                    publisher = Publishers.Publisher(item.find('id').text, item.find('name').text)
+                    # print(item)
+                    publisher = PublishersModule.Publisher(item.find('id').text, item.find('name').text)
                     publisher.descripcion = item.find('description').text
                     publisher.deck = item.find('deck').text
                     if item.find('image').find('super_url') != None:

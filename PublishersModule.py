@@ -119,10 +119,7 @@ name=?,description=?,deck=?,logoImagePath=? where id=?''', (publisher.name,publi
         self.listaComicVineSearch = comic_searcher.listaBusquedaVine
         if not os.path.exists(path):
             os.makedirs(path)
-
-        for publisher in comic_searcher.listaBusquedaVine:
-                Stuff.convertAndDownload(publisher.logoImagePath,path)
-            #self.add(serie)
+        #self.add(serie)
         #print('porcentaje completado: ' + str((100 * (len(lista_series) / comic_searcher.cantidadResultados))))
 
 
