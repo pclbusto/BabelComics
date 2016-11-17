@@ -4,7 +4,7 @@ from kivy.uix.screenmanager import *
 from kivy.uix.button import Label
 from PublishersModule import *
 from kivy.uix.carousel import Carousel
-from kivy.uix.image import AsyncImage
+from kivy.uix.image import AsyncImage, Image
 import Stuff
 
 class KivyPublisherGui(GridLayout):
@@ -14,7 +14,8 @@ class KivyPublisherGui(GridLayout):
         if publisher.logoImagePath:
             jpg = Stuff.convertAndDownload(publisher.logoImagePath, "publishers\\temp\\")
             print(jpg)
-            self.logo = AsyncImage(source=jpg)
+            # self.logo = AsyncImage(source=jpg)
+            self.logo = Image(source=jpg)
             self.add_widget(self.logo)
         self.label = Label(text=publisher.name)
         self.cols=1
@@ -31,19 +32,19 @@ class KivyAllPublishersGui(Carousel):
 
         panelx4 = GridLayout(cols=2)
         indice = 1
+
         for publisher in self.listaPublishers:
-            if indice%4==0:
-                pass
+            if not (indice%5==0):
+                panelx4.add_widget(KivyPublisherGui(publisher))
             else:
-
-
-
-
-            self.add_widget(KivyPublisherGui(publisher))
+                self.add_widget(panelx4)
+                panelx4 = GridLayout(cols=2)
+            indice += 1
+            # self.add_widget(KivyPublisherGui(publisher))
 class Test(App):
     def build(self):
         publishers = Publishers()
-        publishers.searchInComicVine("marvel")
+        publishers.searchInComicVine("Dark")
         carousel = KivyAllPublishersGui(publishers.listaComicVineSearch,direction='right')
         return carousel
 

@@ -11,7 +11,7 @@ def convertAndDownload(url,path):
     file_name_no_ext = (file_name[:-4])
     print(url)
     u = urllib.request.urlopen(url)
-    if os.path.exists(path+file_name):
+    if os.path.exists(path+file_name_no_ext + ".jpg"):
         return path + file_name_no_ext + ".jpg"
     f = open(path+file_name, 'wb')
     meta = u.info()
@@ -39,4 +39,4 @@ def convertAndDownload(url,path):
     return path + outfile
 
 if __name__ == "__main__":
-    convertAndDownload("http://comicvine.gamespot.com/api/image/scale_large/575705-logo_150.gif", "publishers\\temp\\")
+    convertAndDownload("http://comicvine.gamespot.com/api/image/scale_large/1272643-marvel_music.jpg", "publishers\\temp\\")
