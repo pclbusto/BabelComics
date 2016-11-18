@@ -12,6 +12,7 @@ def convertAndDownload(url,path):
     print(url)
     u = urllib.request.urlopen(url)
     if os.path.exists(path+file_name_no_ext + ".jpg"):
+        print("existe")
         return path + file_name_no_ext + ".jpg"
     f = open(path+file_name, 'wb')
     meta = u.info()
