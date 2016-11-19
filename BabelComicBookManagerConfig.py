@@ -79,7 +79,7 @@ class BabelComicBookManagerConfig():
         '''
         cursor = self.conexion.cursor()
         #actualizamos
-        cursor.execute('''UPDATE config_VineKeysStatus SET cantidadTotalConsultas = cantidadTotalConsultas+1 , fechaHoraInicioConsulta = :fechaHoraInicioConsulta where key=:key and recurso = :recurso''', {"key":key, "recurso":recurso, "fechaHoraInicioConsulta":datetime.datetime.now().timestamp()})
+        cursor.execute('''UPDATE config_VineKeysStatus SET cantidadTotalConsultas = cantidadTotalConsultas+1 , fechaHoraInicioConsulta = :fechaHoraInicioConsulta where key=:key and recurso = :recurso''', {"key":key, "recurso":recurso, "fechaHoraInicioConsulta":datetime.now().timestamp()})
         self.conexion.commit()
 
     def addDirectorio(self, directorio):
@@ -108,8 +108,9 @@ class BabelComicBookManagerConfig():
 
     def setListaTipos(self, listaTipos=[]):
         self.__delAllTipos__()
-        for tipo in listaTipos:
-            self.addTipo(tipo)
+        if listaTipos:
+            for tipo in listaTipos:
+                self.addTipo(tipo)
 
     def delClave(self, clave):
         cursor = self.conexion.cursor()
@@ -131,13 +132,15 @@ class BabelComicBookManagerConfig():
 
     def setListaDirectorios(self, listaDirectorios=[]):
         self.__delAllDirectorios__()
-        for directorio in listaDirectorios:
-            self.addDirectorio(directorio)
+        if listaDirectorios:
+            for directorio in listaDirectorios:
+                self.addDirectorio(directorio)
 
     def setListaClaves(self, listaClaves=[]):
         self.__delAllClaves__()
-        for clave in listaClaves:
-            self.addClave(clave)
+        if listaClaves:
+            for clave in listaClaves:
+                self.addClave(clave)
 
     def __getClaveMenosUsadaPorRecurso__(self, recurso):
         cursor = self.conexion.cursor()

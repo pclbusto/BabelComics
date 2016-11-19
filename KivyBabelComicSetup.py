@@ -18,10 +18,10 @@ class KivyPanelABM(GridLayout):
         super(KivyPanelABM, self).__init__(**kwargs)
         self.cols=2
         self.nombreABM = nombreABM
-        self.lista = TreeView(hide_root=True)
+        self.lista = TreeView(hide_root=True,size_hint_x=0.9)
         self.add_widget(self.lista)
-        self.panelbotoneraAcciones = GridLayout(cols=1, size_hint_y=None, size=(0, 27))
-        self.panelbotoneraAcciones.padding=[100,10,10,10]
+        self.panelbotoneraAcciones = GridLayout(cols=1, size_hint_x=0.1, size_hint_y=None, size=(0, 27))
+        # self.panelbotoneraAcciones.padding=[100,10,10,10]
         self.btnAdd = Button(background_normal="Add.png",  size_hint=(None,None), size=(21, 27))
         self.btnAdd.bind(on_press=self.btnEventAdd)
         self.btnEdit = Button(background_normal="Edit.png", size_hint=(None,None), size=(21, 27))
@@ -36,6 +36,13 @@ class KivyPanelABM(GridLayout):
 
         for elemento in lista:
             self.lista.add_node(TreeViewLabel(text=elemento))
+
+    def getLista(self):
+        list = []
+        print("arbol: "+str(self.lista))
+        for nodo in self.lista.iterate_all_nodes(node=None):
+            list.append(nodo.text)
+        return list[1:]
     def btnEventAdd(self, value):
         panel = GridLayout(cols=1)
         self.text = TextInput()
@@ -71,22 +78,36 @@ class KivyPanelABM(GridLayout):
         self.lista.get_selected_node().text=self.text.text
         # self.lista.add_node(TreeViewLabel(text=self.text.text))
         self.popup.dismiss()
+
 class KivyConfigGui(Screen):
     def __init__(self, **kwargs):
         # make sure we aren't overriding any important functionality
         super(KivyConfigGui, self).__init__(**kwargs)
-        babelComicConfig = BabelComicBookManagerConfig()
+        self.babelComicConfig = babelComicConfig = BabelComicBookManagerConfig()
+        self.panelPrincipal = GridLayout(cols=1)
         self.grilla = GridLayout(cols=2)
+        self.panelPrincipal.add_widget(self.grilla)
 
+        self.abmClaves=KivyPanelABM(babelComicConfig.listaClaves,"Clave")
+        self.abmDirectorios = KivyPanelABM(babelComicConfig.listaDirectorios,"Directorio")
+        self.abmTipos = KivyPanelABM(babelComicConfig.listaTipos,"Tipo Archivo")
 
-        self.listaDirectorios = TreeView(hide_root=True)
-        self.listaTipos = TreeView(hide_root=True)
+        self.grilla.add_widget(self.abmClaves)
+        self.grilla.add_widget(self.abmDirectorios)
+        self.grilla.add_widget(self.abmTipos)
 
-        self.grilla.add_widget(KivyPanelABM(babelComicConfig.listaClaves,"Clave"))
-        self.grilla.add_widget(KivyPanelABM(babelComicConfig.listaDirectorios,"Directorio"))
-        self.grilla.add_widget(KivyPanelABM(babelComicConfig.listaTipos,"Tipo Archivo"))
+        self.btnGuardar=Button(text="Guardar",size_hint_y=None, size=(0,23))
+        self.panelPrincipal.add_widget(self.btnGuardar)
+        self.btnGuardar.bind(on_press=self.btnGuardarEvnt)
+        self.statusText = Label(size_hint_y=None, size=(0,23))
+        self.panelPrincipal.add_widget(self.statusText)
+        self.add_widget(self.panelPrincipal)
 
-        self.add_widget(self.grilla)
+    def btnGuardarEvnt(self, value):
+        self.babelComicConfig.setListaDirectorios(self.abmDirectorios.getLista())
+        self.babelComicConfig.setListaTipos(self.abmTipos.getLista())
+        self.babelComicConfig.setListaClaves(self.abmClaves.getLista())
+        self.statusText.text='Status: Gurdado exitosamente'
 
 class Test(App):
     def build(self):
