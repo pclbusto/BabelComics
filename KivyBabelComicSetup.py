@@ -5,10 +5,14 @@ from kivy.uix.button import Label
 from PublishersModule import *
 from kivy.uix.textinput import TextInput
 from kivy.uix.button import Button
-from kivy.uix.checkbox import CheckBox
+from ComicBooks import *
 from kivy.uix.treeview import TreeView,TreeViewLabel
 from kivy.uix.popup import Popup
 from kivy.uix.textinput import TextInput
+from kivy.uix.progressbar import ProgressBar
+from BabelComicsScanner import BabelComicBookScanner
+import threading
+import time
 
 from BabelComicBookManagerConfig import *
 
@@ -79,6 +83,51 @@ class KivyPanelABM(GridLayout):
         # self.lista.add_node(TreeViewLabel(text=self.text.text))
         self.popup.dismiss()
 
+class KivyPanelScanner(GridLayout):
+    def __init__(self, **kwargs):
+        # make sure we aren't overriding any important functionality
+        super(KivyPanelScanner, self).__init__(**kwargs)
+        self.cols=1
+        self.progressBar = ProgressBar(max=100,size_hint_y=None,size=(0,20))
+        self.panelBotones=GridLayout(cols=2,size_hint_y=None, size=(0,20))
+        btnLimpiarComics = Button(text="Limpiar base de comics")
+        btnLimpiarComics.bind(on_press=self.borrarComics)
+        btnScanear = Button(text="Iniciar scaneo de comics")
+        btnScanear.bind(on_press=self.initScanner)
+        self.panelBotones.add_widget(btnLimpiarComics)
+        self.panelBotones.add_widget(btnScanear)
+        self.add_widget(self.progressBar)
+        self.add_widget(self.panelBotones)
+        self.statusText = Label(size_hint_y=None, size=(0, 20))
+        self.add_widget(self.statusText)
+
+    def mostrarMensajeStatus(self,mensaje):
+        self.textoStatus = mensaje
+        t = threading.Thread(target=self.__cargaMensajeyBorrar)
+        t.start()
+
+    def __cargaMensajeyBorrar(self):
+        self.statusText.text = self.textoStatus
+        time.sleep(5)
+        self.statusText.text = self.textoStatus = ""
+
+    def borrarComics(self,value):
+        comics = ComicBooks()
+        comics.rmAll()
+        self.mostrarMensajeStatus("Base de comics limpia.")
+
+    def initScanner(self,value):
+        self.config = BabelComicBookManagerConfig()
+        self.manager = BabelComicBookScanner(self.config.listaDirectorios, self.config.listaTipos)
+        self.manager.iniciarScaneo()
+        t = threading.Thread(target=self.checkScanning)
+        t.start()
+
+    def checkScanning(self):
+        while (self.manager.scanerDir.isAlive()):
+            self.statusText.text  = "porcentanje scannig {:.2%}".format(self.manager.porcentajeCompletado/100)
+            self.progressBar.value  = self.manager.porcentajeCompletado
+
 class KivyConfigGui(Screen):
     def __init__(self, **kwargs):
         # make sure we aren't overriding any important functionality
@@ -95,13 +144,16 @@ class KivyConfigGui(Screen):
         self.grilla.add_widget(self.abmClaves)
         self.grilla.add_widget(self.abmDirectorios)
         self.grilla.add_widget(self.abmTipos)
+        self.grilla.add_widget(KivyPanelScanner())
 
-        self.btnGuardar=Button(text="Guardar",size_hint_y=None, size=(0,23))
+        self.btnGuardar=Button(text="Guardar",size_hint_y=None, size=(0,20))
         self.panelPrincipal.add_widget(self.btnGuardar)
         self.btnGuardar.bind(on_press=self.btnGuardarEvnt)
-        self.statusText = Label(size_hint_y=None, size=(0,23))
+        self.statusText = Label(size_hint_y=None, size=(0,20))
         self.panelPrincipal.add_widget(self.statusText)
         self.add_widget(self.panelPrincipal)
+
+
 
     def btnGuardarEvnt(self, value):
         self.babelComicConfig.setListaDirectorios(self.abmDirectorios.getLista())

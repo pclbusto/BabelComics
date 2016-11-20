@@ -79,7 +79,7 @@ class BabelComicBookManagerConfig():
         '''
         cursor = self.conexion.cursor()
         #actualizamos
-        cursor.execute('''UPDATE config_VineKeysStatus SET cantidadTotalConsultas = cantidadTotalConsultas+1 , fechaHoraInicioConsulta = :fechaHoraInicioConsulta where key=:key and recurso = :recurso''', {"key":key, "recurso":recurso, "fechaHoraInicioConsulta":datetime.now().timestamp()})
+        cursor.execute('''UPDATE config_VineKeysStatus SET cantidadTotalConsultas = cantidadTotalConsultas+1 , fechaHoraInicioConsulta = :fechaHoraInicioConsulta where key=:key and recurso = :recurso''', {"key":key, "recurso":recurso, "fechaHoraInicioConsulta":datetime.datetime.now().timestamp()})
         self.conexion.commit()
 
     def addDirectorio(self, directorio):

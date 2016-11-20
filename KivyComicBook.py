@@ -54,7 +54,8 @@ class KivyComicBook():
         self.paginas.sort()
         self.indicePaginaActual = 0
     def getImagePage(self):
-
+        if not hasattr(self,'cbFile'):
+            self.openCbFile()
         return MemoryImage(self.cbFile.open(self.paginas[self.indicePaginaActual]), self.getPageExtension())
         # print(self.paginas[self.indicePaginaActual])
         # self.cbFile.extract(self.paginas[self.indicePaginaActual])
