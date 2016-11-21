@@ -50,7 +50,7 @@ class KivyAllComicsGui(Screen):
         self.listaComicBooks = comicBooks
         self.panel = GridLayout(cols=1)
         self.thumbnailWidth=160
-        self.thumbnailHeight = 220
+        self.thumbnailHeight = 280
 
         self.cantidadColumnas = int(Window.width/self.thumbnailWidth)
         self.cantidadFilas = int(Window.width/self.thumbnailHeight)
@@ -88,9 +88,9 @@ class KivyAllComicsGui(Screen):
         self.__tbuscar__()
 
     def buscar(self):
-        comicBooks = KivyComicBook()
-        comicBooks.searchInComicVine(self.searchText.text)
-        self.listaPublishers = publishers.listaComicVineSearch
+        comicBooks = KivyComicBooks()
+        comicBooks.list(('%'+self.searchText.text+'%',), 'path like ?')
+        self.listaComicBooks = comicBooks.listaConsulta
         self.indice=0
         self.__loadComicBooks__()
 
@@ -123,5 +123,5 @@ class Test(App):
         return carousel
 
 if __name__ == "__main__":
-    Window.size=(1920,1080)
+    # Window.size=(1920,1080)
     Test().run()
