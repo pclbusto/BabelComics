@@ -118,15 +118,10 @@ class KivyAllComicsGui(Screen):
 
 class Test(App):
     def build(self):
-
         comics = KivyComicBooks()
         lista = comics.list(('%Green Lantern Corps %',), 'path like ?')
         self.listaComics = comics.listaConsulta
-
         carousel = KivyAllComicsGui(self.listaComics)
-
-
-
         return carousel
 
 if __name__ == "__main__":
