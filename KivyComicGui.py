@@ -23,12 +23,13 @@ from kivy.uix.listview import ListView
 class KivySmallComicGui(GridLayout):
     def __init__(self,comicBook, **kwargs):
         super(KivySmallComicGui,self).__init__(**kwargs)
-        self.size_hint = (1, 1)
+        self.size_hint = (None,None)
+        self.size = (160,320)
         self.comicBook = comicBook
         self.panelCover=GridLayout(cols=2)
         self.cover = comicBook.getImagePage()
-        self.cover.size_hint = (None, )
-        # self.cover.size = (1,250)
+        self.cover.size_hint = (None,None )
+        self.cover.size = (160,220)
         # self.panelCover.add_widget(self.cover)
         # self.panelBotonera = GridLayout(cols=1,size_hint = (0.1, 1))
         # self.panelCover.add_widget(self.panelBotonera)
@@ -36,7 +37,7 @@ class KivySmallComicGui(GridLayout):
         self.add_widget(self.cover)
         self.cols=1
         self.panelLabel = GridLayout(cols=2,size_hint_y=.4)
-        self.label = Label(text=comicBook.getNombreArchivo(),text_size = (100,None))
+        self.label = Label(text=comicBook.getNombreArchivo(),text_size = (160,None))
         self.add_widget(self.label)
 
 class KivyAllComicsGui(Screen):
@@ -48,9 +49,11 @@ class KivyAllComicsGui(Screen):
         self.carrusel.size_hint = (1, 1)
         self.listaComicBooks = comicBooks
         self.panel = GridLayout(cols=1)
-        self.thumbnailWidth=100
+        self.thumbnailWidth=160
+        self.thumbnailHeight = 220
+
         self.cantidadColumnas = int(Window.width/self.thumbnailWidth)
-        self.cantidadFilas = 4
+        self.cantidadFilas = int(Window.width/self.thumbnailHeight)
         self.searchText = TextInput(text='Buscar comic', multiline=False)
         self.searchText.size_hint_y = None
         self.searchText.size[1] = 30
@@ -73,6 +76,7 @@ class KivyAllComicsGui(Screen):
 
         self.panel.add_widget(self.carrusel)
         self.add_widget(self.panel)
+
         self.__loadComicBooks__()
         self.indice = 0
 
@@ -107,6 +111,7 @@ class KivyAllComicsGui(Screen):
 
 class Test(App):
     def build(self):
+
         comics = KivyComicBooks()
         lista = comics.list(('%(1970)%','%(1971)%',), 'path like ? or path like ?')
         self.listaComics = comics.listaConsulta
@@ -118,4 +123,5 @@ class Test(App):
         return carousel
 
 if __name__ == "__main__":
+    Window.size=(1920,1080)
     Test().run()

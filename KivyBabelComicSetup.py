@@ -114,7 +114,7 @@ class KivyPanelScanner(GridLayout):
     def borrarComics(self,value):
         comics = ComicBooks()
         comics.rmAll()
-        self.mostrarMensajeStatus("Base de comics limpia.")
+        self.mostrarMensajeStatus("Eliminación registros de comics.")
 
     def initScanner(self,value):
         self.config = BabelComicBookManagerConfig()
