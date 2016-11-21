@@ -15,7 +15,7 @@ class KivyVisor(Screen):
         super(KivyVisor, self).__init__(**kwargs)
         self.scatter = Scatter()
         self.bind(on_touch_down=self.on_touch)
-        self.comic = KivyComicBook("E:\\Comics\\DC\\DC Week+ (03-11-2015)\\Green Lantern Corps V2011 #40 (2015).cbz")
+        self.comic = KivyComicBook("C:\\Users\\pclbu\Pictures\\Action Comics 965 (2016) (2 covers) (Digital) (Zone-Empire).cbr")
         self.comic.openCbFile()
         self.imagenPagina = self.comic.getImagePage()
         self.scatter.center = Window.center

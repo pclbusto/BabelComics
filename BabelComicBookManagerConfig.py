@@ -144,6 +144,7 @@ class BabelComicBookManagerConfig():
 
     def __getClaveMenosUsadaPorRecurso__(self, recurso):
         cursor = self.conexion.cursor()
+        print("SELECT key,min(cantidadTotalConsultas) as cantidadTotalConsultas FROM config_VineKeysStatus WHERE recurso="+ recurso)
         cursor.execute('''SELECT key,min(cantidadTotalConsultas) as cantidadTotalConsultas FROM config_VineKeysStatus WHERE recurso=?''', (recurso,))
         row = cursor.fetchone()
         if row:
@@ -155,6 +156,8 @@ class BabelComicBookManagerConfig():
     def getClave(self, recurso):
         if self.validarRecurso(recurso):
             clave = self.__getClaveMenosUsadaPorRecurso__(recurso)
+            print("dsdas")
+            print(clave)
             return clave
         else:
             print("no existe el recurso " + recurso)

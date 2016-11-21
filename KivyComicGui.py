@@ -27,7 +27,8 @@ class KivySmallComicGui(GridLayout):
         self.size = (160,320)
         self.comicBook = comicBook
         self.panelCover=GridLayout(cols=2)
-        self.cover = comicBook.getImagePage()
+        #self.cover = comicBook.getImagePage()
+        self.cover = Image(source="CoverGenerica.png.jpg")
         self.cover.size_hint = (None,None )
         self.cover.size = (160,220)
         # self.panelCover.add_widget(self.cover)
@@ -51,9 +52,11 @@ class KivyAllComicsGui(Screen):
         self.panel = GridLayout(cols=1)
         self.thumbnailWidth=160
         self.thumbnailHeight = 280
-
+        print(Window.size)
         self.cantidadColumnas = int(Window.width/self.thumbnailWidth)
-        self.cantidadFilas = int(Window.width/self.thumbnailHeight)
+        self.cantidadFilas = int(Window.height/self.thumbnailHeight)
+        print(self.cantidadColumnas)
+        print(self.cantidadFilas)
         self.searchText = TextInput(text='Buscar comic', multiline=False)
         self.searchText.size_hint_y = None
         self.searchText.size[1] = 30
