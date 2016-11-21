@@ -10,7 +10,7 @@ class KivyComicBooks():
         self.listaConsulta = []
         self.vistaConsultas = 'biblioteca'
         self.indiceColumnaOrdenamiento = 1
-        self.listaCamposTabla = ['comicRowId', 'path', 'titulo', 'serieId',
+        self.listaCamposTabla = ['idFila', 'path', 'titulo', 'serieId',
                                  'numero', 'fechaTapa', 'AnioInicio',
                                  'volumen', 'idExterno', 'resumen',
                                  'notas', 'anio', 'mes', 'dia',
@@ -111,7 +111,7 @@ Values(
             (path,))
         r = cursor.fetchone()
         comic = KivyComicBook(path, r['titulo'], r['serieId'], r['numero'])
-        comic.rowId = r['comicRowId']
+        comic.idFila = r['idFila']
         comic.fechaTapa = r['fechaTapa']
         comic.AnioInicio = r['AnioInicio']
         comic.volumen = r['volumen']
@@ -184,10 +184,11 @@ where path=?
         rows = cursor.fetchall()
         self.listaConsulta = []
         self.cantidadRegistrosConsulta = self.__getCantidadRegistros__(valores, filtro)
+
         for row in rows:
             comic = KivyComicBook(row['path'], row['titulo'], row['serieId'], row['numero'])
             # print(row['rowid'])
-            comic.rowId = row['comicRowId']
+            comic.idFila = row['idFila']
             comic.fechaTapa = row['fechaTapa']
             comic.AnioInicio = row['AnioInicio']
             comic.volumen = row['volumen']
@@ -214,9 +215,9 @@ where path=?
 
 
 if __name__ == "__main__":
-    comics = KivyComicBook()
-    comics.__getCantidadPaginas__(('%%',), 'path like ?')
-    print(comics.__getCantidadPaginas__(('%%',), 'path like ?'))
+    comics = KivyComicBooks()
+    comics.__getCantidadPaginas__(('%Legends %',), 'path like ?')
+    print(comics.__getCantidadPaginas__(('%Legends %',), 'path like ?'))
     ##    for r in cursor.fetchall():
     # print(comic.resumen)
     comics.close()

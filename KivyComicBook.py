@@ -2,6 +2,8 @@ import os
 import zipfile
 import rarfile
 from MemoryImage import *
+from PIL import Image as PILImage, ImageTk as PILImageTk
+
 
 class KivyComicBook():
     def __init__(self, path, titulo='', serie=-1, numero=-1):
@@ -53,8 +55,9 @@ class KivyComicBook():
         #print(len(self.paginas))
         self.paginas.sort()
         self.indicePaginaActual = 0
+
     def getImagePage(self):
-        if not hasattr(self,'cbFile'):
+        if not hasattr(self, 'cbFile'):
             self.openCbFile()
         return MemoryImage(self.cbFile.open(self.paginas[self.indicePaginaActual]), self.getPageExtension())
         # print(self.paginas[self.indicePaginaActual])
@@ -62,6 +65,12 @@ class KivyComicBook():
         #
         # # return (Image.open(self.getPage()))
         # return Image(source = self.paginas[self.indicePaginaActual])
+
+    def getImagePagePIL(self):
+        if not hasattr(self, 'cbFile'):
+            self.openCbFile()
+        return (PILImage.open(self.getPage()))
+
     def getCantidadPaginas(self):
         return (len(self.paginas))
     def getPage(self):

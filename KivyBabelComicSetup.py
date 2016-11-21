@@ -24,13 +24,13 @@ class KivyPanelABM(GridLayout):
         self.nombreABM = nombreABM
         self.lista = TreeView(hide_root=True,size_hint_x=0.9)
         self.add_widget(self.lista)
-        self.panelbotoneraAcciones = GridLayout(cols=1, size_hint_x=0.1, size_hint_y=None, size=(0, 27))
+        self.panelbotoneraAcciones = GridLayout(cols=1, size_hint_x=0.1, size_hint_y=None, size=(0, 32))
         # self.panelbotoneraAcciones.padding=[100,10,10,10]
-        self.btnAdd = Button(background_normal="Add.png",  size_hint=(None,None), size=(21, 27))
+        self.btnAdd = Button(background_normal="Add.png",  size_hint=(None,None), size=(32, 32))
         self.btnAdd.bind(on_press=self.btnEventAdd)
-        self.btnEdit = Button(background_normal="Edit.png", size_hint=(None,None), size=(21, 27))
+        self.btnEdit = Button(background_normal="Edit.png", size_hint=(None,None), size=(32, 32))
         self.btnEdit.bind(on_press=self.btnEventEdit)
-        self.btnDel = Button(background_normal="Delete.png", size_hint=(None,None), size=(21, 27))
+        self.btnDel = Button(background_normal="Delete.png", size_hint=(None,None), size=(32, 32))
         self.btnDel.bind(on_press=self.btnEventDel)
 
         self.panelbotoneraAcciones.add_widget(self.btnAdd)
@@ -93,8 +93,10 @@ class KivyPanelScanner(GridLayout):
         btnLimpiarComics = Button(text="Limpiar base de comics")
         btnLimpiarComics.bind(on_press=self.borrarComics)
         btnScanear = Button(text="Iniciar scaneo de comics")
-        btnIniciarCreacionThumbnails = Button(text = "Inciar creación Thumnails")
         btnScanear.bind(on_press=self.initScanner)
+        btnIniciarCreacionThumbnails = Button(text = "Inciar creación Thumnails")
+        btnIniciarCreacionThumbnails.bind(on_press=self.initCrearThumnails)
+
         self.panelBotones.add_widget(btnLimpiarComics)
         self.panelBotones.add_widget(btnScanear)
         self.panelBotones.add_widget(btnIniciarCreacionThumbnails)
@@ -102,6 +104,14 @@ class KivyPanelScanner(GridLayout):
         self.add_widget(self.panelBotones)
         self.statusText = Label(size_hint_y=None, size=(0, 20))
         self.add_widget(self.statusText)
+
+    def initCrearThumnails(self,value):
+
+        self.config = BabelComicBookManagerConfig()
+        self.manager = BabelComicBookScanner(self.config.listaDirectorios, self.config.listaTipos)
+        self.manager.iniciarThumnails()
+        t = threading.Thread(target=self.checkThumnailsGenerator())
+        t.start()
 
     def mostrarMensajeStatus(self,mensaje):
         self.textoStatus = mensaje
@@ -124,6 +134,12 @@ class KivyPanelScanner(GridLayout):
         self.manager.iniciarScaneo()
         t = threading.Thread(target=self.checkScanning)
         t.start()
+
+    def checkThumnailsGenerator(self):
+        while (self.manager.createThumnails.isAlive()):
+            self.statusText.text  = "porcentanje scannig {:.2%}".format(self.manager.porcentajeCompletado/100)
+            self.progressBar.value  = self.manager.porcentajeCompletado
+
 
     def checkScanning(self):
         while (self.manager.scanerDir.isAlive()):

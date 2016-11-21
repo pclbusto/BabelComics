@@ -6,7 +6,7 @@ import threading
 from BabelComicBookManagerConfig import *
 
 import sqlite3
-
+from KivyComicBooks import *
 
 class BabelComicBookScanner():
     def __init__(self, listaDirectorios, listaTipos):
@@ -14,7 +14,29 @@ class BabelComicBookScanner():
         self.listaTipos = listaTipos
         self.porcentajeCompletado = 0.0
         self.scanerDir = threading.Thread(target=self.scanearDirtorios)
+        self.createThumnails = threading.Thread(target=self.crearThumbnails)
         self.comics = []
+
+    def crearThumbnails(self):
+        comics = KivyComicBooks()
+        print("iniciando creacion de thumnails")
+        lista = comics.list(('%Green Lantern Corps %',), 'path like ?')
+        cantidadAProcesar = comics.cantidadRegistrosConsulta
+        print("cantidad a procesasr :{}".format(comics.getCantidadPaginas()))
+        cantidadProcesada = 0
+        # for i in range(0,comics.getCantidadPaginas()+1):
+        comics.goto(0)
+        lista = comics.list(('%Green Lantern Corps %',), 'path like ?')
+        for comicbook in lista:
+            self.porcentajeCompletado = 100 * (cantidadProcesada / cantidadAProcesar)
+            cover = comicbook.getImagePagePIL()
+            cover.thumbnail((120,240))
+            cover.save("thumnails\\" + str(comicbook.idFila)+".jpg")
+
+            print(comicbook.path)
+            cantidadProcesada += 1
+        print("finalizando creacion de thumnails")
+
 
     def countfilesToProces(self):
         cantidad = 0
@@ -58,6 +80,8 @@ class BabelComicBookScanner():
     def iniciarScaneo(self):
         self.scanerDir.start()
 
+    def iniciarThumnails(self):
+        self.createThumnails.start()
 
 def testScanning():
     while (manager.scanerDir.isAlive()):

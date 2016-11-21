@@ -11,7 +11,7 @@ class MemoryImage(Image):
     def __init__(self,memoryFile, ext, **kwargs):
         super(MemoryImage, self).__init__(**kwargs)
         data = BytesIO(memoryFile.read())
-        im = CoreImage(data,ext=ext)
+        im = CoreImage(data,ext=ext.lower())
         with self.canvas:
             self.texture = im.texture
 

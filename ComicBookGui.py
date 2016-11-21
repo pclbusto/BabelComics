@@ -144,7 +144,7 @@ class ComicBookGui(Frame):
 
 if (__name__ == '__main__'):
     comics = ComicBooks()
-    comic = comics.get('C:\\Users\\bustoped\\Pictures\\comics\\(1996) 7h3_f1n4l_n1gh7_01-10.howtoarsenio.blogspot.com\\TFN #04 - The Power of Shazam! #20.howtoarsenio.blogspot.com.cbr')
+    comic = comics.get('C:\\senio.blogspot.com.cbr')
     root = Tk()
     frameComic = ComicBookGui(root, comic)
     frameComic.grid(padx=5, pady=5, sticky=(N, W, E, S))

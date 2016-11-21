@@ -27,8 +27,11 @@ class KivySmallComicGui(GridLayout):
         self.size = (160,320)
         self.comicBook = comicBook
         self.panelCover=GridLayout(cols=2)
-        #self.cover = comicBook.getImagePage()
-        self.cover = Image(source="CoverGenerica.png.jpg")
+        if os.path.exists("thumnails\\" + str(comicBook.idFila)+".jpg"):
+            self.cover = Image(source = "thumnails\\" + str(comicBook.idFila)+".jpg")
+        else:
+            self.cover = comicBook.getImagePage()
+        # self.cover = Image(source="test.jpg")
         self.cover.size_hint = (None,None )
         self.cover.size = (160,220)
         # self.panelCover.add_widget(self.cover)
@@ -104,6 +107,7 @@ class KivyAllComicsGui(Screen):
         for comicBook in self.listaComicBooks:
             if not (indice % (self.cantidadColumnas * self.cantidadFilas) == 0):
                 print("agregando a panel")
+                print(comicBook.path)
                 self.panelx4.add_widget(KivySmallComicGui(comicBook))
             else:
                 print("creando panel y agregando a carusel")
@@ -116,7 +120,7 @@ class Test(App):
     def build(self):
 
         comics = KivyComicBooks()
-        lista = comics.list(('%(1970)%','%(1971)%',), 'path like ? or path like ?')
+        lista = comics.list(('%Green Lantern Corps %',), 'path like ?')
         self.listaComics = comics.listaConsulta
 
         carousel = KivyAllComicsGui(self.listaComics)
