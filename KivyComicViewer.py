@@ -6,16 +6,16 @@ from kivy.uix.popup import Popup
 from kivy.uix.button import Button
 from KivyComicBook import *
 from kivy.core.window import Window
-from kivy.uix.screenmanager import Screen,ScreenManager
+from kivy.uix.modalview import ModalView
 
 
-class KivyVisor(Screen):
+class KivyVisor(ModalView):
 
-    def __init__(self,**kwargs):
+    def __init__(self, comicBook, **kwargs):
         super(KivyVisor, self).__init__(**kwargs)
         self.scatter = Scatter()
         self.bind(on_touch_down=self.on_touch)
-        self.comic = KivyComicBook("C:\\Users\\pclbu\Pictures\\Action Comics 965 (2016) (2 covers) (Digital) (Zone-Empire).cbr")
+        self.comic = comicBook
         self.comic.openCbFile()
         self.imagenPagina = self.comic.getImagePage()
         self.scatter.center = Window.center
@@ -104,11 +104,8 @@ class KivyVisor(Screen):
 
 class Test(App):
     def build(self):
-        # sm =ScreenManager()
-        #
-        # sm.add_widget(KivyVisor())
-        #return sm
-        return KivyVisor()
+        comicBook = KivyComicBook("C:\\Comics\\Green Lanterns 009 (2016) (2 covers) (digital) (Minutemen-Thoth).cbz")
+        return KivyVisor(comicBook)
 if __name__ == "__main__":
     Test().run()
 
