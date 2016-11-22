@@ -9,7 +9,7 @@ import Stuff
 from kivy.uix.textinput import TextInput
 from kivy.uix.button import Button
 from kivy.uix.checkbox import CheckBox
-from MemoryImage import *
+from kivy.uix.popup import Popup
 from threading import Thread
 from KivyComicBook import *
 from KivyComicBooks import *
@@ -41,8 +41,26 @@ class KivySmallComicGui(GridLayout):
         self.add_widget(self.cover)
         self.cols=1
         self.panelLabel = GridLayout(cols=2,size_hint_y=.4)
-        self.label = Label(text=comicBook.getNombreArchivo(),text_size = (160,None))
+
+        self.label = Label(text='[ref=world]{}[/ref]'.format(comicBook.getNombreArchivo()), markup=True,
+                           text_size=(160, None))
+        self.label.bind(on_ref_press=self.showOptions)
         self.add_widget(self.label)
+
+    def showOptions(self,obk,evnt):
+        # print(obj)
+        panel = GridLayout(cols=1)
+        panel.add_widget(Button(text="Catalogar usando ComicVine",size_hint_y=None,size=(0,30)))
+        panel.add_widget(Button(text="ver info comic",size_hint_y=None,size=(0,30)))
+        panel.add_widget(Button(text="Leer Comic",size_hint_y=None,size=(0,30), on_press=self.viewComic))
+
+        popup = Popup(title='Opciones',
+                           content=panel,
+                           size_hint=(.6, None),size=(0,150))
+
+        popup.open()
+    def viewComic(self,evnt):
+        print("implementar")
 
 class KivyAllComicsGui(Screen):
     def __init__(self, comicBooks, **kwargs):
