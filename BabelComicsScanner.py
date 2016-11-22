@@ -20,13 +20,15 @@ class BabelComicBookScanner():
     def crearThumbnails(self):
         comics = KivyComicBooks()
         print("iniciando creacion de thumnails")
-        lista = comics.list(('%batman%',), 'path like ?')
+        if not os.path.exists("thumnails"):
+            os.mkdir("thumnails")
+        lista = comics.list(('%%',), 'path like ?')
         cantidadAProcesar = comics.cantidadRegistrosConsulta
         print("cantidad a procesasr :{}".format(comics.getCantidadPaginas()))
         cantidadProcesada = 0
         # for i in range(0,comics.getCantidadPaginas()+1):
         comics.goto(0)
-        lista = comics.list(('%batman%',), 'path like ?')
+        lista = comics.list(('%%',), 'path like ?')
         for comicbook in lista:
             self.porcentajeCompletado = 100 * (cantidadProcesada / cantidadAProcesar)
             if not os.path.exists("thumnails\\" + str(comicbook.idFila) + ".jpg"):
