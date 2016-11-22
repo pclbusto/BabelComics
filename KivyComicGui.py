@@ -59,6 +59,7 @@ class KivySmallComicGui(GridLayout):
                            size_hint=(.6, None),size=(0,150))
         self.popup.open()
     def viewComic(self,evnt):
+        self.popup.dismiss()
         self.popup = KivyVisor(self.comicBook)
         self.popup.open()
     def salir(self):
