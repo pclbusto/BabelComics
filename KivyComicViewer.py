@@ -14,31 +14,34 @@ class KivyVisor(ModalView):
     def __init__(self, comicBook, **kwargs):
         super(KivyVisor, self).__init__(**kwargs)
         self.scatter = Scatter()
+        self.scatter.center = Window.center
+        print("scatter center: {}".format(self.scatter.center))
         self.bind(on_touch_down=self.on_touch)
         self.comic = comicBook
         self.comic.openCbFile()
         self.imagenPagina = self.comic.getImagePage()
         self.imagenPagina.size = self.imagenPagina.texture_size
-        print(self.imagenPagina.texture_size)
+        self.imagenPagina.size_hint=(None,None)
         self.scatter.size_hint = (None, None)
         self.scatter.size=self.imagenPagina.texture_size
-
+        self.scatter.center = Window.center
+        print("image size: {}".format(self.imagenPagina.size))
+        print("scatter center: {}".format(self.scatter.center))
+        print("window center: {}".format(Window.center))
         self.scatter.pos_hint=(None, None)
-        # self.imagenPagina.center = self.scatter.center
-        # self.scatter.center = Window.center
-        #self.scatter.size =self.imagenPagina.size
-        # self.scatter.size_hint = (None,None)
         self.scatter.add_widget(self.imagenPagina)
         self.scatter.do_rotation=False
-        self.add_widget(self.scatter)
-        self.scatter.pos=(0,0)
-        # Window.center[1]-(self.imagenPagina.height/2)
-        #ajustar tamañio a altura
-        #alturaactual/#altura venta (regla de tres simple)
-        # self.scatter.scale=Window.height/self.imagenPagina.height
-        #centrar la imagen
 
-        # Window.center[0]-(self.imagenPagina.width/2)
+        self.scatter.center=(0,0)
+        self.imagenPagina.center=(0,0)
+        '''recordar que la imagen se mueve desde el centro. y la posicion es relativa al centro del contenedor en este caso es el scatter'''
+        self.imagenPagina.pos = (0,-222)
+
+
+        self.add_widget(self.scatter)
+        # self.scatter.x = 1111
+        print("scatter center: {}".format(self.scatter.center))
+        print("scatter Heiht: {}".format(self.scatter.height))
         Window.bind(on_motion=self.on_motion)
 
     def on_motion(self, etype, motionevent,other):
@@ -51,7 +54,7 @@ class KivyVisor(ModalView):
 
         else:
             # print(self.scatter.pos)
-            print("tamaño imagen :{}".format(self.imagenPagina.size))
+            print("pos imagen :{}".format(self.imagenPagina.pos))
             print("tamaño scatter :{}".format(self.scatter.size))
         # help(other)
         # print(motionevent)
@@ -93,12 +96,14 @@ class KivyVisor(ModalView):
             self.imagenPagina = self.comic.getImagePage()
             self.imagenPagina.size = self.imagenPagina.texture_size
             self.scatter.add_widget(self.imagenPagina)
+
         if (zona4[0][0]< event.pos[0] and event.pos[0] < zona4[0][1]) and (event.pos[1]<zona4[1][0] and event.pos[1]>zona4[1][1]):
             self.scatter.remove_widget(self.imagenPagina)
             self.comic.gotoNextPage()
             self.imagenPagina = self.comic.getImagePage()
             self.imagenPagina.size = self.imagenPagina.texture_size
             self.scatter.add_widget(self.imagenPagina)
+            self.scatter.pos = (0, 0)
         if (zona0[0][0]< event.pos[0] and event.pos[0] < zona0[0][1]) and (zona0[1][0]<event.pos[1] and event.pos[1]<zona0[1][1]):
             box = GridLayout(cols=5)
             botonAncho = Button(text="Ancho")
@@ -127,26 +132,24 @@ class KivyVisor(ModalView):
         self.scatter.pos = (0, 0)
 
     def ajustarAlto(self,event):
-        print(Window.height)
+        print("alto: {}".format(Window.height))
         self.scatter.scale = Window.height / self.imagenPagina.height
         self.scatter.pos = (0, 0)
 
     def rotar(self,event):
         print("rotar")
     def centrado(self,event):
-        # print( Window.center)
-        # print(Window.center[0] - (self.imagenPagina.width / 2), Window.center[1] - (self.imagenPagina.height / 2))
         self.scatter.scale = Window.height / self.imagenPagina.height
         self.scatter.pos=(0,0)
-        #Window.center[0] - (self.imagenPagina.width ), 0)
         print("centrado")
         self.scatter.center = Window.center
 
 
 class Test(App):
     def build(self):
-        comicBook = KivyComicBook("C:\\Comics\\Green Lanterns 009 (2016) (2 covers) (digital) (Minutemen-Thoth).cbz")
-        return KivyVisor(comicBook)
+        comicBook = KivyComicBook("E:\\Comics\Marvel\\Iron man comics 1963-2010\\Iron Man DVD2\\Iron-Man101-200\\Iron Man V1968 #102 (1977).cbz")
+        kv = KivyVisor(comicBook)
+        return kv
 if __name__ == "__main__":
     Test().run()
 
