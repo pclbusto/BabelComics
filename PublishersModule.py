@@ -5,6 +5,9 @@ import sqlite3
 from ComicVineSearcher import *
 import os
 import Stuff
+import shutil
+import os
+
 
 class Publisher:
     def __init__(self,id,name):
@@ -13,7 +16,18 @@ class Publisher:
         self.deck = ""
         self.description=""
         self.logoImagePath=""
-
+    def hasLocalLogo(self):
+        if self.logoImagePath:
+            file_name = self.logoImagePath.split('/')[-1]
+            file_name_no_ext = (file_name[:-4])
+            if os.path.exists(BabelComicBookManagerConfig().getPublisherTempLogoPath() + file_name_no_ext + ".jpg"):
+                return True
+        return False
+    def getLogoLocalPath(self):
+        file_name = self.logoImagePath.split('/')[-1]
+        file_name_no_ext = (file_name[:-4])
+        if self.hasLocalLogo():
+            return BabelComicBookManagerConfig().getPublisherLogoPath() + file_name_no_ext + ".jpg"
 
 class Publishers:
     def __init__(self):
@@ -26,6 +40,15 @@ class Publishers:
         c.execute('''INSERT INTO publishers (id, name, deck, description, logoImagePath)
 Values(?,?,?,?,?)''', (publisher.id,publisher.name,publisher.deck,publisher.description,publisher.logoImagePath))
         self.conexion.commit()
+
+        '''copiamos el logo desde el dir temp al de logos. el temp tiene mas logos
+        de lo que he guardados'''
+        file_name = publisher.logoImagePath.split('/')[-1]
+        file_name_no_ext = (file_name[:-4])
+        if os.path.exists(BabelComicBookManagerConfig().getPublisherTempLogoPath() + file_name_no_ext + ".jpg"):
+            shutil.copyfile(BabelComicBookManagerConfig().getPublisherTempLogoPath() + file_name_no_ext + ".jpg",
+                            BabelComicBookManagerConfig().getPublisherLogoPath() + file_name_no_ext + ".jpg")
+
     def rm(self,Id):
         cursor=self.conexion.cursor()
         cursor.execute('''DELETE From publishers where id=?''', (Id,))
@@ -39,7 +62,8 @@ Values(?,?,?,?,?)''', (publisher.id,publisher.name,publisher.deck,publisher.desc
         publisher = Publisher(row['id'], row['name'])
         publisher.descripcion = row['description']
         publisher.deck = row['deck']
-        publisher.publisherId = row['logoImagePath']
+        publisher.logoImagePath = row['logoImagePath']
+
         return publisher
     def get(self,Id):
         cursor=self.conexion.cursor()
@@ -90,7 +114,7 @@ name=?,description=?,deck=?,logoImagePath=? where id=?''', (publisher.name,publi
     def getList(self,valores,filtro=None,orden=None):
         c=self.conexion.cursor()
         if not orden: orden=''
-        if filtro!='':
+        if filtro:
             c.execute('''SELECT id, name, deck, description, logoImagePath From publishers where '''+filtro+' '+orden, valores)
         else:
             c.execute('''id, name, deck, description, logoImagePath From publishers'''+' '+orden)

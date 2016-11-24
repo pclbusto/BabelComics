@@ -1,6 +1,6 @@
 import urllib.request
 from PIL import Image
-#import os, sys
+
 from PIL import ImageFile
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 import os
@@ -8,7 +8,7 @@ import os
 def convertAndDownload(url,path):
     file_name = url.split('/')[-1]
     file_name_no_ext = (file_name[:-4])
-    print(url)
+    # print(url)
 
     if os.path.exists(path+file_name_no_ext + ".jpg"):
         return path + file_name_no_ext + ".jpg"
