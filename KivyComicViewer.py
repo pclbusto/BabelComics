@@ -49,7 +49,7 @@ class KivyVisor(ModalView):
         Window.bind(on_motion=self.on_motion)
         Window.bind(on_resize=self.on_sizeWindow)
     def on_sizeWindow(self,arg1,arg2,arg3):
-        self.imagenPagina.pos = (0, Window.center[1] - self.imagenPagina.size[1] / 2)
+        self.__refreshPage__()
     def on_motion(self, etype, motionevent,other):
         if other.is_mouse_scrolling:
             if other.button=='scrolldown':
@@ -132,11 +132,14 @@ class KivyVisor(ModalView):
         print(Window.width)
         self.modoVisualizacion = KivyVisor.MODO_AJUSTADO_ANCHO
         self.scatter.scale = Window.width / self.imagenPagina.width
-        self.scatter.pos = (0, 0)
+        self.__refreshPage__()
+        #
+        # self.scatter.pos = (0, 0)
 
     def __refreshPage__(self):
+        self.scatter.remove_widget(self.imagenPagina)
         self.imagenPagina = self.comic.getImagePage()
-        # self.scatter.center = self.imagenPagina.center = Window.center
+        self.scatter.center = self.imagenPagina.center = Window.center
         self.imagenPagina.size = self.imagenPagina.texture_size
         self.scatter.add_widget(self.imagenPagina)
 
@@ -146,13 +149,15 @@ class KivyVisor(ModalView):
             self.imagenPagina.pos = (0, 0)
         elif self.modoVisualizacion == KivyVisor.MODO_AJUSTADO_ANCHO:
 
-            self.imagenPagina.pos = (0,-(self.imagenPagina.size))
+            self.imagenPagina.pos = (0,(self.scatter.scale,(Window.center[1] - (self.imagenPagina.size[1] / 2 )*self.scatter.scale)))
             print("Centro window {} size_y {} factor {} new_pos_Y {}".format(Window.center[1], self.imagenPagina.size[1], self.scatter.scale,(Window.center[1] - (self.imagenPagina.size[1] / 2 )*self.scatter.scale)))
     def ajustarAlto(self,event):
         print("alto: {}".format(Window.height))
         self.modoVisualizacion = KivyVisor.MODO_AJUSTADO_ALTURA
         self.scatter.scale = Window.height / self.imagenPagina.height
-        self.scatter.pos = (0, 0)
+        self.__refreshPage__()
+        #
+        # self.scatter.pos = (0, 0)
 
     def rotar(self,event):
         print("rotar")
@@ -165,7 +170,7 @@ class KivyVisor(ModalView):
 
 class Test(App):
     def build(self):
-        comicBook = KivyComicBook("C:\\comics\\Azrael\\v1 003.cbr")
+        comicBook = KivyComicBook("E:\\Comics\Marvel\\Iron man comics 1963-2010\\Iron Man DVD2\\Iron-Man101-200\\Iron Man V1968 #102 (1977).cbz")
         kv = KivyVisor(comicBook)
         return kv
 if __name__ == "__main__":
