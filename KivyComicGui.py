@@ -2,23 +2,17 @@ from kivy.app import App
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.screenmanager import *
 from kivy.uix.button import Label
-from PublishersModule import *
 from kivy.uix.carousel import Carousel
-from kivy.uix.image import AsyncImage, Image
-from kivy.uix.modalview import ModalView
 from kivy.uix.textinput import TextInput
 from kivy.uix.button import Button
-from kivy.uix.checkbox import CheckBox
 from kivy.uix.popup import Popup
 from threading import Thread
 from KivyComicBook import *
 from KivyComicBooks import *
 from kivy.core.window import Window
 from KivyComicViewer import KivyVisor
-
-
+from KivyVineCataloger import *
 from BabelComicBookManagerConfig import *
-from kivy.uix.listview import ListView
 
 class KivySmallComicGui(GridLayout):
     def __init__(self,comicBook, **kwargs):
@@ -50,13 +44,17 @@ class KivySmallComicGui(GridLayout):
     def showOptions(self,obj,evnt):
         # print(obj)
         panel = GridLayout(cols=1)
-        panel.add_widget(Button(text="Catalogar usando ComicVine",size_hint_y=None,size=(0,30)))
+        panel.add_widget(Button(text="Catalogar usando ComicVine",size_hint_y=None,size=(0,30),on_press=self.catalogComic))
         panel.add_widget(Button(text="ver info comic",size_hint_y=None,size=(0,30)))
         panel.add_widget(Button(text="Leer Comic",size_hint_y=None,size=(0,30), on_press=self.viewComic))
 
         self.popup = Popup(title='Opciones',
                            content=panel,
                            size_hint=(.6, None),size=(0,150))
+        self.popup.open()
+    def catalogComic(self,evnt):
+        self.popup.dismiss()
+        self.popup = KivyVineCataloger(self.comicBook)
         self.popup.open()
     def viewComic(self,evnt):
         self.popup.dismiss()

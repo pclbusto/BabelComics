@@ -1,5 +1,5 @@
 import sqlite3
-from datetime import datetime
+import datetime
 from ComicVineSearcher import *
 import os
 
@@ -42,18 +42,31 @@ class BabelComicBookManagerConfig():
         for row in rows:
             # print(row['key'])
             self.listaClaves.append(row['key'])
-    def getPublisherLogoPath(self):
-        if os.path.exists("publishers\\logos\\"):
-            return "publishers\\logos\\"
-        else:
-            os.mkdir("publishers\\logos\\")
-            return "publishers\\logos\\"
+
     def getPublisherTempLogoPath(self):
-        if os.path.exists("publishers\\temp\\"):
-            return "publishers\\temp\\"
-        else:
-            os.mkdir("publishers\\temp\\")
-            return "publishers\\temp\\"
+        return self.__getTempPath__("publisher")
+
+    def getPublisherLogoPath(self):
+        return self.__getPath__("publisher")
+
+    def getSerieCoverPath(self):
+        return self.__getPath__("serie")
+
+    def getSerieTempCoverPath(self):
+        return self.__getTempPath__("serie")
+
+    def __getTempPath__(self,entidad):
+        path = "imagenes\\{}\\temp\\".format(entidad)
+        if not os.path.exists(path):
+            os.makedirs(path)
+        return path
+
+    def __getPath__(self, entidad):
+        path = "imagenes\\{}\\".format(entidad)
+        if not os.path.exists(path):
+            os.makedirs(path)
+        return path
+
     def __initStatus__(self,clave):
         """
         para la clave de comicvine cargamos para cada recurso (entidad por la cual se consulta {publisher, publishers, story_arc, series, etc}) la cantidad de consultas

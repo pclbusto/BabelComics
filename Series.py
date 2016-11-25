@@ -11,7 +11,7 @@ class Series:
         self.conexion = sqlite3.connect('BabelComic.db')
         self.conexion.row_factory = sqlite3.Row
         self.status = 1
-
+        self.entityName = "volumes"
     def add(self, serie):
         c = self.conexion.cursor()
         c.execute('''INSERT INTO series (id,nombre,descripcion,image_url,publisherId,AnioInicio,cantidadNumeros)
@@ -19,6 +19,11 @@ Values(?,?,?,?,?,?,?)''', (
         serie.id, serie.nombre, serie.descripcion, serie.image_url, serie.publisherId, serie.AnioInicio,
         serie.cantidadNumeros))
         self.conexion.commit()
+        file_name = serie.image_url.split('/')[-1]
+        file_name_no_ext = (file_name[:-4])
+        if os.path.exists(BabelComicBookManagerConfig().getSerieTempCoverPath() + file_name_no_ext + ".jpg"):
+            shutil.copyfile(BabelComicBookManagerConfig().getSerieTempCoverPath() + file_name_no_ext + ".jpg",
+                            BabelComicBookManagerConfig().getSerieCoverPath() + file_name_no_ext + ".jpg")
 
     def rm(self, Id):
         cursor = self.conexion.cursor()
@@ -38,7 +43,7 @@ Values(?,?,?,?,?,?,?)''', (
         r = cursor.fetchone()
         if (r):
             self.status = 1
-            serie = Serie(r['id'], r['nombre'])
+            serie = Serie.Serie(r['id'], r['nombre'])
             serie.descripcion = r['descripcion']
             serie.image_url = r['image_url']
             serie.publisherId = r['publisherId']
@@ -113,7 +118,7 @@ Values(?,?,?,?,?,?,?)''', (
         rows = c.fetchall()
         lista = []
         for row in rows:
-            serie = Serie(row['id'], row['nombre'])
+            serie = Serie.Serie(row['id'], row['nombre'])
             serie.descripcion = row['descripcion']
             serie.image_url = row['image_url']
             serie.publisherId = row['publisherId']
@@ -145,25 +150,20 @@ Values(?,?,?,?,?,?,?)''', (
             self.add(serie)
         print('porcentaje completado: '+str((100*(len(lista_series)/comic_searcher.cantidadResultados))))
 
+    def searchInComicVine(self, filtro):
+        config = BabelComicBookManagerConfig()
+        clave = config.getClave(self.entityName)
+        comic_searcher = ComicVineSearcher(clave)
+        comic_searcher.setEntidad(self.entityName)
+        comic_searcher.addFilter("name:"+filtro.replace(" ","%20"))
+        comic_searcher.vineSearch(0)
+        self.listaComicVineSearch = comic_searcher.listaBusquedaVine
+        # if not os.path.exists(path):
+        #     os.makedirs(path)
 if __name__ == "__main__":
 
-    ##67600 dio error
-    ##67700 dio error
     series = Series()
-    #series.getList('', None, 'order by nombre desc')
-    #series.rmAll()
-    for i in range(1,50):
-        series.loadDataFromComicVine()
+    series.searchInComicVine("Green arrow")
 
-
-    ##
-    ##    series.loadFromFiles()
-    ##    series.rmAll()
-    ##    serie = Serie('-1','No especificada')
-    ##    series.rm('-1')
-    ##    series.add(serie)
-    ##   for serie in series.getList(("-1",),'id = ?'):
-
-    #for serie in series.getList('', None, 'order by nombre desc'):
-    #    print(serie.nombre, serie.id)
-    #series.close()
+    for serie in series.listaComicVineSearch:
+        print("nombre: {} editorial: {}".format(serie.nombre, serie.publisherId))

@@ -3,7 +3,7 @@ from tkinter import Tk, ttk
 import math
 import os
 import urllib.request
-
+import BabelComicBookManagerConfig
 
 class Serie():
     def __init__(self, Id, nombre):
@@ -15,6 +15,20 @@ class Serie():
         self.publisherName = ''
         self.AnioInicio = ''
         self.cantidadNumeros = 0
+
+    def hasLocalCover(self):
+        if self.image_url:
+            file_name = self.image_url.split('/')[-1]
+            file_name_no_ext = (file_name[:-4])
+            if os.path.exists(BabelComicBookManagerConfig.BabelComicBookManagerConfig().getSerieCoverPath() + file_name_no_ext + ".jpg"):
+                return True
+        return False
+
+    def getCoverLocalPath(self):
+        file_name = self.image_url.split('/')[-1]
+        file_name_no_ext = (file_name[:-4])
+        if self.hasLocalCover():
+            return BabelComicBookManagerConfig.BabelComicBookManagerConfig().getSerieCoverPath() + file_name_no_ext + ".jpg"
 
     def getImageCover(self):
         nombreImagen = self.image_url[self.image_url.rindex('/') + 1:]

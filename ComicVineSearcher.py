@@ -1,7 +1,7 @@
 import PublishersModule
 from ComicBook import ComicBook
 from ArcoArgumental import *
-from Serie import Serie
+import Serie
 import datetime
 import urllib.request
 import xml.etree.ElementTree as ET
@@ -205,14 +205,18 @@ class ComicVineSearcher():
 
             elif self.entidad == 'volumes':
                 for item in results:
-                    l_serie = Serie(item.find('id').text, item.find('name').text)
+                    l_serie = Serie.Serie(item.find('id').text, item.find('name').text)
                     l_serie.descripcion = item.find('description').text
                     l_serie.cantidadNumeros = item.find('count_of_issues').text
-                    if item.find('image').find('super_url') != None:
-                        l_serie.image_url = item.find('image').find('super_url').text
+                    if item.find('image').find('thumb_url') != None:
+                        l_serie.image_url = item.find('image').find('thumb_url').text
                     else:
                         l_serie.image_url = ''
-                    l_serie.publisherId = item.find('publisher').text
+
+                    if item.find('publisher').find('id')!= None:
+                        l_serie.publisherId = item.find('publisher').find('id').text
+                    else:
+                        l_serie.publisherId = "-1"
                     l_serie.AnioInicio = item.find('start_year').text
                     self.listaBusquedaVine.append(l_serie)
 
