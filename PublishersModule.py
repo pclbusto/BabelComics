@@ -20,7 +20,7 @@ class Publisher:
         if self.logoImagePath:
             file_name = self.logoImagePath.split('/')[-1]
             file_name_no_ext = (file_name[:-4])
-            if os.path.exists(BabelComicBookManagerConfig().getPublisherTempLogoPath() + file_name_no_ext + ".jpg"):
+            if os.path.exists(BabelComicBookManagerConfig().getPublisherLogoPath() + file_name_no_ext + ".jpg"):
                 return True
         return False
     def getLogoLocalPath(self):
