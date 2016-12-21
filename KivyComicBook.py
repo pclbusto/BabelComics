@@ -3,7 +3,8 @@ import zipfile
 import rarfile
 from MemoryImage import *
 from PIL import Image as PILImage, ImageTk as PILImageTk
-
+from io import StringIO
+from PIL import ImageFile
 
 class KivyComicBook():
     def __init__(self, path, titulo='', serie=-1, numero=-1):
@@ -41,6 +42,7 @@ class KivyComicBook():
         self.fechaultimaActualizacion = ''
         self.fechaultimaActualizacionSistemaExterno = ''
         self.rowId = 0
+        self.sizeThumnails = (150, 150)
 ##        self.paginas = []
     def tieneArcoAlterno(self):
         return len(self.seriesAlternasNumero)>0
@@ -71,8 +73,18 @@ class KivyComicBook():
             self.openCbFile()
         return (PILImage.open(self.getPage()))
 
+    def getThumnail(self):
+        nombreArchivo = "ThumnailsPages\\" + self.getNombreArchivo(False) + "-" + str(self.indicePaginaActual)+".jpg"
+        if not (os.path.exists(nombreArchivo)):
+            imagen = self.getImagePagePIL()
+            imagen.thumbnail(self.sizeThumnails)
+            imagen.save(nombreArchivo,"jpeg")
+        # fp = open(nombreArchivo, "rb")
+        return Image(source=nombreArchivo)
+
     def getCantidadPaginas(self):
         return (len(self.paginas))
+
     def getPage(self):
         return(self.cbFile.open(self.paginas[self.indicePaginaActual]))
     def getPageExtension(self):
