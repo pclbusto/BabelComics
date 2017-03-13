@@ -13,6 +13,8 @@ from kivy.core.window import Window
 from KivyComicViewer import KivyVisor
 from KivyVineCataloger import *
 from BabelComicBookManagerConfig import *
+import threading
+from kivy.clock import  Clock
 
 class KivySmallComicGui(GridLayout):
     def __init__(self,comicBook, **kwargs):
@@ -101,7 +103,6 @@ class KivyAllComicsGui(Screen):
 
         self.panel.add_widget(self.carrusel)
         self.add_widget(self.panel)
-
         self.__loadComicBooks__()
         self.indice = 0
 
@@ -119,30 +120,41 @@ class KivyAllComicsGui(Screen):
         self.indice=0
         self.__loadComicBooks__()
 
+    def __updateCarrusell__(self,args):
+
+        ##for comicBook in self.listaComicBooks:
+        if (self.indice>=len(self.listaComicBooks)):
+            Clock.unschedule(self.hiloCargaThumnails)
+            return False
+        comicBook = self.listaComicBooks[self.indice]
+        if not (self.indice % (self.cantidadColumnas * self.cantidadFilas) == 0):
+            print("agregando a panel")
+            print(comicBook.path)
+            self.panelx4.add_widget(KivySmallComicGui(comicBook))
+        else:
+            print("creando panel y agregando a carusel")
+            self.panelx4 = GridLayout(cols=self.cantidadColumnas)
+            self.panelx4.add_widget(KivySmallComicGui(comicBook))
+            self.carrusel.add_widget(self.panelx4)
+        self.indice += 1
+
     def __loadComicBooks__(self):
+        self.indice = 0
         self.carrusel.clear_widgets()
-        panelx4 = GridLayout(cols=self.cantidadColumnas)
-        indice = 0
-        for comicBook in self.listaComicBooks:
-            if not (indice % (self.cantidadColumnas * self.cantidadFilas) == 0):
-                print("agregando a panel")
-                print(comicBook.path)
-                self.panelx4.add_widget(KivySmallComicGui(comicBook))
-            else:
-                print("creando panel y agregando a carusel")
-                self.panelx4 = GridLayout(cols=self.cantidadColumnas)
-                self.panelx4.add_widget(KivySmallComicGui(comicBook))
-                self.carrusel.add_widget(self.panelx4)
-            indice += 1
+        self.panelx4 = GridLayout(cols=self.cantidadColumnas)
+        self.hiloCargaThumnails =  Clock.schedule_interval(self.__updateCarrusell__, 0.1)
+
+
 
 class Test(App):
     def build(self):
         comics = KivyComicBooks()
-        lista = comics.list(('%Green Lantern Corps %',), 'path like ?')
+        lista = comics.list(('%Green%',), 'path like ?')
         self.listaComics = comics.listaConsulta
         carousel = KivyAllComicsGui(self.listaComics)
         return carousel
 
 if __name__ == "__main__":
+
     # Window.size=(1920,1080)
     Test().run()
