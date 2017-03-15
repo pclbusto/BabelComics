@@ -56,6 +56,7 @@ class KivySmallComicGui(GridLayout):
         self.popup.open()
     def catalogComic(self,evnt):
         self.popup.dismiss()
+
         self.popup = KivyVineCataloger(self.comicBook)
         self.popup.open()
     def viewComic(self,evnt):
@@ -128,11 +129,11 @@ class KivyAllComicsGui(Screen):
             return False
         comicBook = self.listaComicBooks[self.indice]
         if not (self.indice % (self.cantidadColumnas * self.cantidadFilas) == 0):
-            print("agregando a panel")
-            print(comicBook.path)
+            # print("agregando a panel")
+            # print(comicBook.path)
             self.panelx4.add_widget(KivySmallComicGui(comicBook))
         else:
-            print("creando panel y agregando a carusel")
+            # print("creando panel y agregando a carusel")
             self.panelx4 = GridLayout(cols=self.cantidadColumnas)
             self.panelx4.add_widget(KivySmallComicGui(comicBook))
             self.carrusel.add_widget(self.panelx4)

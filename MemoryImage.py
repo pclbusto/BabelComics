@@ -14,6 +14,9 @@ class MemoryImage(Image):
         im = CoreImage(data,ext=ext.lower())
         with self.canvas:
             self.texture = im.texture
+        self.originalHeight = self.texture.height
+        self.originalWidth = self.texture.width
+
 
 
 

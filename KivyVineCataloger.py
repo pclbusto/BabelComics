@@ -7,13 +7,16 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 from kivy.app import App
 from KivyComicBooks import *
+from KivyComicGui import *
 
-class KivyVineCataloger(Screen):
+class KivyVineCataloger(ModalView):
 
     def __init__(self, comicBook, **kwargs):
         super(KivyVineCataloger, self).__init__(**kwargs)
         self.panel = GridLayout(cols=3)
+        print("Antes de dar error")
         self.original = KivySmallComicGui(comicBook,size_hint=(1,None))
+        print("Despues de dar error")
         self.panel.add_widget(self.original)
         self.panelSerie=GridLayout(cols=1,size_hint=(0.3,None))
         self.panelSerie.add_widget(Button(text="Serie", size_hint=(0.5,None),size=(0,30)))

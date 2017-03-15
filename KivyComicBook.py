@@ -91,13 +91,29 @@ class KivyComicBook():
         #print('En Comicbook getPageExtension:'+str(len(self.paginas)))
         return (self.paginas[self.indicePaginaActual][-3:])
     def gotoNextPage(self):
-        self.goto(self.indicePaginaActual+1)
+        cantidadPaginas = self.getCantidadPaginas()
+        if self.indicePaginaActual<cantidadPaginas-15:
+            self.goto(self.indicePaginaActual+1)
+            print("OK")
+            return True
+
+        else:
+            print("EOF")
+            return False
+
     def gotoPrevPage(self):
-        self.goto(self.indicePaginaActual-1)
+        if self.indicePaginaActual>0:
+            self.goto(self.indicePaginaActual-1)
+            return True
+        else:
+            return False
     def goto(self,index):
         if index < len(self.paginas) and index>=0:
             self.indicePaginaActual = index
-        #print(self.indicePaginaActual)
+            return True
+        else:
+            return False
+
     def getTitulo(self):
         return(self.titulo)
     def getPath(self):
